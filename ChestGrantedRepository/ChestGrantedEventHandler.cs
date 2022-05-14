@@ -1,4 +1,4 @@
-﻿using ChestGrantedRepository.PublicEventsArgs;
+﻿using ChestGrantedRepository.EventsArgs;
 using ChestGrantedRepository.Responses;
 using LCUSharp;
 using LCUSharp.Websocket;
@@ -18,7 +18,10 @@ namespace ChestGrantedRepository
 
         // Public Events, events who listen the controller (who has some instance of this class)
         public event EventHandler<LeagueClientStatusChange> OnLeagueClientStatusChange;
-        public event EventHandler<GameFlowChangedResponse> OnGameFlowChanged;
+        public event EventHandler<GameFlowChanged> OnGameFlowChanged;
+        public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
+        public event EventHandler<SummonerInfo> OnGetChestEligibility;
+        public event EventHandler<SummonerInfo> OnGetProfileIcon;
 
         // Private Events, event who listen by my selft (subscribe to accions of LCU)
         private event EventHandler<LeagueEvent> GameFlowChanged;
@@ -62,32 +65,44 @@ namespace ChestGrantedRepository
             SyncContext.Post(e => OnLeagueClientStatusChange?.Invoke(this, response), null);
         }
 
+        public async Task GetProfileIcon()
+        {
+            // TODO buscar el icon loca, sino buscarlo en datadragon
+
+            //var result = await api.RequestHandler.GetResponseAsync<CurrentSummoner>(HttpMethod.Get, LCUEndPoints.CurrentSummoner);
+            var response = new SummonerInfo();
+            SyncContext.Post(e => OnGetProfileIcon?.Invoke(this, response), null);
+        }
+
         // Get some change of game flow
         private void _GameFlowChanged(object sender, LeagueEvent e)
         {
             var result = e.Data.ToString();
 
             // fires my public event to indicate the game flow
-            var response = new GameFlowChangedResponse(Helpers.GetStateFromString(result));
+            var response = new GameFlowChanged(Helpers.GetStateFromString(result));
             SyncContext.Post(e => OnGameFlowChanged?.Invoke(this, response), null);
         }
           
-        public async Task<SummonerProfile> GetSummonerProfile()
-        {
-            var result = await api.RequestHandler.GetResponseAsync<SummonerProfile>(HttpMethod.Get, LCUEndPoints.SummonerProfile);
-            return result;
-        }
-
-        public async Task<CurrentSummoner> GetCurrentSummoner()
+        public async Task GetCurrentSummoner()
         {
             var result = await api.RequestHandler.GetResponseAsync<CurrentSummoner>(HttpMethod.Get, LCUEndPoints.CurrentSummoner);
-            return result;
+            var response = new SummonerInfo()
+            {
+                displayName = result.displayName,
+                profileIconId = result.profileIconId,
+            };
+            SyncContext.Post(e => OnGetCurrentSummoner?.Invoke(this, response), null);
         }
 
-        public async Task<ChestEligibility> GetChestEligibility()
+        public async Task GetChestEligibility()
         {
             var result = await api.RequestHandler.GetResponseAsync<ChestEligibility>(HttpMethod.Get, LCUEndPoints.ChestEligibility);
-            return result;
+            var response = new SummonerInfo()
+            {
+                earnableChests = result.earnableChests,
+            };
+            SyncContext.Post(e => OnGetChestEligibility?.Invoke(this, response), null);
         }
 
         public void SubscribeToChampSelected()

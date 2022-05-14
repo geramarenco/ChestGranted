@@ -1,5 +1,5 @@
 ﻿using ChestGrantedRepository;
-using ChestGrantedRepository.PublicEventsArgs;
+using ChestGrantedRepository.EventsArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,15 @@ namespace ChestGrantedController
         public CGController(IChestGrantedView view)
         {
             this.view = view;
+            CleanShownData();
+
             eventHandler = new ChestGrantedEventHandler();
             eventHandler.OnLeagueClientStatusChange += OnLeagueClientStatusChange;
             eventHandler.OnGameFlowChanged += OnGameFlowChanged;
+            eventHandler.OnGetCurrentSummoner += OnGetCurrentSummoner;
+            eventHandler.OnGetChestEligibility += OnGetChestEligibility;
+            eventHandler.OnGetProfileIcon += OnGetProfileIcon;
+
             ConnectLC();
         }
 
@@ -26,40 +32,60 @@ namespace ChestGrantedController
             await eventHandler.Connect();
         }
 
-        private async void OnLeagueClientStatusChange(object sender, LeagueClientStatusChange e)
+        private void OnLeagueClientStatusChange(object sender, LeagueClientStatusChange e)
         {
             if (e.IsRunning)
             {
-                // TODO aca tira 404 porque todavia no levanto (al momento de tener corriendo esto antes que el lol)
-                await UpdateSummonerInfo();
-                await UpdateChestInfo();
+                UpdateSummonerInfo();
+                UpdateChestInfo();
                 view.LoLIsRunning = true;
             }
             else
             {
-                // TODO unsubscribe of all events
-                // Wait untill LC is opened again
+                view.LoLIsRunning = false;
+                CleanShownData();
                 ConnectLC();
             }
         }
 
-        private async Task UpdateChestInfo()
+        private void CleanShownData()
         {
-            var chestEligibility = await eventHandler.GetChestEligibility();
-            view.EarnableChests = chestEligibility.earnableChests;
+            view.EarnableChests = 0;
+            view.SummonerName = "";
         }
 
-        private async Task UpdateSummonerInfo()
+        private void UpdateChestInfo()
         {
-            var currentSummoner = await eventHandler.GetCurrentSummoner();
-            // TODO get summoner Icon
-            //var icon = currentSummoner.profileIconId;
+            _ = eventHandler.GetChestEligibility();
+        }
 
-            view.SummonerName = currentSummoner.displayName;
+        private void OnGetChestEligibility(object sender, SummonerInfo e)
+        {
+            view.EarnableChests = e.earnableChests;
+        }
+
+        private void UpdateSummonerInfo()
+        {
+            _ = eventHandler.GetCurrentSummoner();
+        }
+
+        private void OnGetCurrentSummoner(object sender, SummonerInfo e)
+        {
+            view.SummonerName = e.displayName;
+            GetProfileIcon(e.profileIconId);
+        }
+
+        private void GetProfileIcon(int profileIconId)
+        {
+            _ = eventHandler.GetProfileIcon();
+        }
+
+        private void OnGetProfileIcon(object sender, SummonerInfo e)
+        {
             //view.ProfilePicture = profilePicture;
         }
 
-        private async void OnGameFlowChanged(object sender, GameFlowChangedResponse e)
+        private void OnGameFlowChanged(object sender, GameFlowChanged e)
         {
             if (e.State == ChestGrantedRepository.Enums.GameFlowStates.ChampSelect)
             {
@@ -71,7 +97,7 @@ namespace ChestGrantedController
             }
 
             if (e.State == ChestGrantedRepository.Enums.GameFlowStates.WaitingForStats)
-                await UpdateChestInfo();
+                UpdateChestInfo();
         }
 
     }

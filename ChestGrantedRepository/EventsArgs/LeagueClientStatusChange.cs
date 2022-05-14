@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 
 
-namespace ChestGrantedRepository.PublicEventsArgs
+namespace ChestGrantedRepository.EventsArgs
 {
     /// <summary>
     ///     Communication class for threads

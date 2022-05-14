@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using ChestGrantedRepository.Enums;
 
-namespace ChestGrantedRepository.PublicEventsArgs
+namespace ChestGrantedRepository.EventsArgs
 {
-    public class GameFlowChangedResponse
+    public class GameFlowChanged
     {
         private GameFlowStates _state;
-        internal GameFlowChangedResponse(GameFlowStates state)
+        internal GameFlowChanged(GameFlowStates state)
         {
             _state = state;
         }
