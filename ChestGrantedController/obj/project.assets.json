@@ -45,6 +45,19 @@
           "lib/netstandard2.1/Websocket.Client.dll": {}
         }
       },
+      "ChestGrantedRepository/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "LCUSharp": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ChestGrantedRepository.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ChestGrantedRepository.dll": {}
+        }
+      },
       "LCUSharp/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
@@ -156,6 +169,11 @@
         "websocket.client.nuspec"
       ]
     },
+    "ChestGrantedRepository/1.0.0": {
+      "type": "project",
+      "path": "../ChestGrantedRepository/ChestGrantedRepository.csproj",
+      "msbuildProject": "../ChestGrantedRepository/ChestGrantedRepository.csproj"
+    },
     "LCUSharp/1.0.0": {
       "type": "project",
       "path": "../LCUSharp/LCUSharp.csproj",
@@ -164,7 +182,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "LCUSharp >= 1.0.0"
+      "ChestGrantedRepository >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -174,9 +192,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedCore.csproj",
-      "projectName": "ChestGrantedCore",
-      "projectPath": "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedCore.csproj",
+      "projectUniqueName": "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedController.csproj",
+      "projectName": "ChestGrantedController",
+      "projectPath": "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedController.csproj",
       "packagesPath": "C:\\Users\\Gera\\.nuget\\packages\\",
       "outputPath": "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\obj\\",
       "projectStyle": "PackageReference",
@@ -199,8 +217,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\Proyectos\\ChestGranted\\LCUSharp\\LCUSharp.csproj": {
-              "projectPath": "D:\\Proyectos\\ChestGranted\\LCUSharp\\LCUSharp.csproj"
+            "D:\\Proyectos\\ChestGranted\\ChestGrantedRepository\\ChestGrantedRepository.csproj": {
+              "projectPath": "D:\\Proyectos\\ChestGranted\\ChestGrantedRepository\\ChestGrantedRepository.csproj"
             }
           }
         }

@@ -1,5 +1,4 @@
-﻿using ChestGrantedCore;
-using ChestGrantedCore.EventsArgs;
+﻿using ChestGrantedController;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,21 +17,29 @@ namespace ChestGrantedView
         public frmMain()
         {
             InitializeComponent();
-            ChestGrantedController eventController = new ChestGrantedController(this);
-
+            CGController controller = new CGController(this);
             InitView();
         }
 
         private void InitView()
         {
-            SetLablesStyle();
+            SetColors();
         }
 
-        private void SetLablesStyle()
+        private void SetColors()
         {
             panLoLNotRunning.BackColor = Colors.BackColor;
+            panLoLIsRunning.BackColor = Colors.BackColor;
+            panSummonerInfo.BackColor = Colors.BackColor;
+
             lblConnecting.BackColor = Colors.BackColor;
             lblConnecting.ForeColor = Colors.ForeColor;
+            lblChests.BackColor = Colors.BackColor;
+            lblChests.ForeColor = Colors.ForeColor;
+            lblEarnableChest.BackColor = Colors.BackColor;
+            lblEarnableChest.ForeColor = Colors.ForeColor;
+            lblSummonerName.BackColor = Colors.BackColor;
+            lblSummonerName.ForeColor = Colors.ForeColor;
         }
 
         public bool LoLIsRunning
@@ -45,5 +52,7 @@ namespace ChestGrantedView
             }
         }
 
+        public string SummonerName { get => lblSummonerName.Text; set => lblSummonerName.Text = value; }
+        public int EarnableChests { get => int.Parse(lblEarnableChest.Text); set => lblEarnableChest.Text = value.ToString(); }
     }
 }

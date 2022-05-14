@@ -35,12 +35,16 @@
             this.panLoLIsRunning = new System.Windows.Forms.Panel();
             this.tPanSummonerInfo = new System.Windows.Forms.TableLayoutPanel();
             this.picSummonerIcon = new System.Windows.Forms.PictureBox();
+            this.panSummonerInfo = new System.Windows.Forms.Panel();
+            this.lblEarnableChest = new System.Windows.Forms.Label();
             this.lblSummonerName = new System.Windows.Forms.Label();
+            this.lblChests = new System.Windows.Forms.Label();
             this.panLoLNotRunning.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picConnecting)).BeginInit();
             this.panLoLIsRunning.SuspendLayout();
             this.tPanSummonerInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSummonerIcon)).BeginInit();
+            this.panSummonerInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // panLoLNotRunning
@@ -93,14 +97,14 @@
             this.tPanSummonerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.5F));
             this.tPanSummonerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 85.5F));
             this.tPanSummonerInfo.Controls.Add(this.picSummonerIcon, 0, 0);
-            this.tPanSummonerInfo.Controls.Add(this.lblSummonerName, 1, 0);
+            this.tPanSummonerInfo.Controls.Add(this.panSummonerInfo, 1, 0);
             this.tPanSummonerInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.tPanSummonerInfo.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tPanSummonerInfo.Location = new System.Drawing.Point(0, 0);
             this.tPanSummonerInfo.Name = "tPanSummonerInfo";
             this.tPanSummonerInfo.RowCount = 1;
             this.tPanSummonerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tPanSummonerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tPanSummonerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 109F));
             this.tPanSummonerInfo.Size = new System.Drawing.Size(800, 109);
             this.tPanSummonerInfo.TabIndex = 0;
             // 
@@ -113,16 +117,47 @@
             this.picSummonerIcon.TabIndex = 0;
             this.picSummonerIcon.TabStop = false;
             // 
+            // panSummonerInfo
+            // 
+            this.panSummonerInfo.Controls.Add(this.lblEarnableChest);
+            this.panSummonerInfo.Controls.Add(this.lblSummonerName);
+            this.panSummonerInfo.Controls.Add(this.lblChests);
+            this.panSummonerInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panSummonerInfo.Location = new System.Drawing.Point(119, 3);
+            this.panSummonerInfo.Name = "panSummonerInfo";
+            this.panSummonerInfo.Size = new System.Drawing.Size(678, 103);
+            this.panSummonerInfo.TabIndex = 1;
+            // 
+            // lblEarnableChest
+            // 
+            this.lblEarnableChest.AutoSize = true;
+            this.lblEarnableChest.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblEarnableChest.Location = new System.Drawing.Point(196, 37);
+            this.lblEarnableChest.Name = "lblEarnableChest";
+            this.lblEarnableChest.Size = new System.Drawing.Size(0, 40);
+            this.lblEarnableChest.TabIndex = 3;
+            this.lblEarnableChest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // lblSummonerName
             // 
             this.lblSummonerName.AutoSize = true;
             this.lblSummonerName.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblSummonerName.Location = new System.Drawing.Point(119, 0);
+            this.lblSummonerName.Location = new System.Drawing.Point(3, 6);
             this.lblSummonerName.Name = "lblSummonerName";
-            this.lblSummonerName.Size = new System.Drawing.Size(162, 40);
-            this.lblSummonerName.TabIndex = 1;
-            this.lblSummonerName.Text = "Summoner:";
-            this.lblSummonerName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSummonerName.Size = new System.Drawing.Size(0, 40);
+            this.lblSummonerName.TabIndex = 2;
+            this.lblSummonerName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblChests
+            // 
+            this.lblChests.AutoSize = true;
+            this.lblChests.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblChests.Location = new System.Drawing.Point(3, 43);
+            this.lblChests.Name = "lblChests";
+            this.lblChests.Size = new System.Drawing.Size(187, 32);
+            this.lblChests.TabIndex = 1;
+            this.lblChests.Text = "Earnable Chests:";
+            this.lblChests.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // frmMain
             // 
@@ -140,8 +175,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.picConnecting)).EndInit();
             this.panLoLIsRunning.ResumeLayout(false);
             this.tPanSummonerInfo.ResumeLayout(false);
-            this.tPanSummonerInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSummonerIcon)).EndInit();
+            this.panSummonerInfo.ResumeLayout(false);
+            this.panSummonerInfo.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -154,6 +190,9 @@
         private System.Windows.Forms.Label lblConnecting;
         private System.Windows.Forms.TableLayoutPanel tPanSummonerInfo;
         private System.Windows.Forms.PictureBox picSummonerIcon;
+        private System.Windows.Forms.Panel panSummonerInfo;
+        private System.Windows.Forms.Label lblChests;
+        private System.Windows.Forms.Label lblEarnableChest;
         private System.Windows.Forms.Label lblSummonerName;
     }
 }

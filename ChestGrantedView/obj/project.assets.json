@@ -45,17 +45,30 @@
           "lib/netstandard2.1/Websocket.Client.dll": {}
         }
       },
-      "ChestGrantedCore/1.0.0": {
+      "ChestGrantedController/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "ChestGrantedRepository": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ChestGrantedController.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ChestGrantedController.dll": {}
+        }
+      },
+      "ChestGrantedRepository/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
           "LCUSharp": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/ChestGrantedCore.dll": {}
+          "bin/placeholder/ChestGrantedRepository.dll": {}
         },
         "runtime": {
-          "bin/placeholder/ChestGrantedCore.dll": {}
+          "bin/placeholder/ChestGrantedRepository.dll": {}
         }
       },
       "LCUSharp/1.0.0": {
@@ -169,10 +182,15 @@
         "websocket.client.nuspec"
       ]
     },
-    "ChestGrantedCore/1.0.0": {
+    "ChestGrantedController/1.0.0": {
       "type": "project",
-      "path": "../ChestGrantedController/ChestGrantedCore.csproj",
-      "msbuildProject": "../ChestGrantedController/ChestGrantedCore.csproj"
+      "path": "../ChestGrantedController/ChestGrantedController.csproj",
+      "msbuildProject": "../ChestGrantedController/ChestGrantedController.csproj"
+    },
+    "ChestGrantedRepository/1.0.0": {
+      "type": "project",
+      "path": "../ChestGrantedRepository/ChestGrantedRepository.csproj",
+      "msbuildProject": "../ChestGrantedRepository/ChestGrantedRepository.csproj"
     },
     "LCUSharp/1.0.0": {
       "type": "project",
@@ -182,7 +200,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0-windows7.0": [
-      "ChestGrantedCore >= 1.0.0"
+      "ChestGrantedController >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -217,8 +235,8 @@
         "net5.0-windows7.0": {
           "targetAlias": "net5.0-windows",
           "projectReferences": {
-            "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedCore.csproj": {
-              "projectPath": "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedCore.csproj"
+            "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedController.csproj": {
+              "projectPath": "D:\\Proyectos\\ChestGranted\\ChestGrantedController\\ChestGrantedController.csproj"
             }
           }
         }

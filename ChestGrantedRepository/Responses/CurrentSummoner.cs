@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChestGrantedCore.LCDtoResponses
+namespace ChestGrantedRepository.Responses
 {
     public class CurrentSummoner
     {
