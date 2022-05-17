@@ -1,4 +1,4 @@
-﻿using ChestGrantedRepository.Enums;
+﻿using ChestGrantedRepository.LeagueClient.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

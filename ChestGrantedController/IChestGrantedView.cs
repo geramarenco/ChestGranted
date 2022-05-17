@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChestGrantedController.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,9 @@ namespace ChestGrantedController
         bool LoLIsRunning { get; set; }
         string SummonerName { get; set; }
         int EarnableChests { get; set; }
+        string ProfilePicture { get; set; }
+        bool ChampSelectStageVisible { get; set; }
+        SelectedChampion MySelectedChamp { get; set; }
+        List<SelectedChampion> MyTeamChamps { get; set; }
     }
 }

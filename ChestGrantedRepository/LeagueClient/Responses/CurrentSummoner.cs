@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChestGrantedRepository.Responses
+namespace ChestGrantedRepository.LeagueClient.Responses
 {
     public class CurrentSummoner
     {

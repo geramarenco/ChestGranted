@@ -33,18 +33,25 @@
             this.lblConnecting = new System.Windows.Forms.Label();
             this.picConnecting = new System.Windows.Forms.PictureBox();
             this.panLoLIsRunning = new System.Windows.Forms.Panel();
+            this.panChampSelect = new System.Windows.Forms.Panel();
+            this.lblTitleSelectedChamp = new System.Windows.Forms.Label();
+            this.lblTitleMap = new System.Windows.Forms.Label();
             this.tPanSummonerInfo = new System.Windows.Forms.TableLayoutPanel();
             this.picSummonerIcon = new System.Windows.Forms.PictureBox();
             this.panSummonerInfo = new System.Windows.Forms.Panel();
             this.lblEarnableChest = new System.Windows.Forms.Label();
             this.lblSummonerName = new System.Windows.Forms.Label();
-            this.lblChests = new System.Windows.Forms.Label();
+            this.lblTitleChests = new System.Windows.Forms.Label();
+            this.panNoChampSalect = new System.Windows.Forms.Panel();
+            this.lblTitleWaiting = new System.Windows.Forms.Label();
             this.panLoLNotRunning.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picConnecting)).BeginInit();
             this.panLoLIsRunning.SuspendLayout();
+            this.panChampSelect.SuspendLayout();
             this.tPanSummonerInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSummonerIcon)).BeginInit();
             this.panSummonerInfo.SuspendLayout();
+            this.panNoChampSalect.SuspendLayout();
             this.SuspendLayout();
             // 
             // panLoLNotRunning
@@ -83,13 +90,48 @@
             // 
             // panLoLIsRunning
             // 
+            this.panLoLIsRunning.Controls.Add(this.panChampSelect);
             this.panLoLIsRunning.Controls.Add(this.tPanSummonerInfo);
+            this.panLoLIsRunning.Controls.Add(this.panNoChampSalect);
             this.panLoLIsRunning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panLoLIsRunning.Location = new System.Drawing.Point(0, 0);
             this.panLoLIsRunning.Name = "panLoLIsRunning";
             this.panLoLIsRunning.Size = new System.Drawing.Size(800, 450);
             this.panLoLIsRunning.TabIndex = 1;
             this.panLoLIsRunning.Visible = false;
+            // 
+            // panChampSelect
+            // 
+            this.panChampSelect.Controls.Add(this.lblTitleSelectedChamp);
+            this.panChampSelect.Controls.Add(this.lblTitleMap);
+            this.panChampSelect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panChampSelect.Location = new System.Drawing.Point(0, 109);
+            this.panChampSelect.Name = "panChampSelect";
+            this.panChampSelect.Size = new System.Drawing.Size(800, 341);
+            this.panChampSelect.TabIndex = 2;
+            this.panChampSelect.Visible = false;
+            // 
+            // lblTitleSelectedChamp
+            // 
+            this.lblTitleSelectedChamp.AutoSize = true;
+            this.lblTitleSelectedChamp.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTitleSelectedChamp.Location = new System.Drawing.Point(12, 62);
+            this.lblTitleSelectedChamp.Name = "lblTitleSelectedChamp";
+            this.lblTitleSelectedChamp.Size = new System.Drawing.Size(193, 32);
+            this.lblTitleSelectedChamp.TabIndex = 3;
+            this.lblTitleSelectedChamp.Text = "Selected Champ:";
+            this.lblTitleSelectedChamp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblTitleMap
+            // 
+            this.lblTitleMap.AutoSize = true;
+            this.lblTitleMap.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTitleMap.Location = new System.Drawing.Point(12, 14);
+            this.lblTitleMap.Name = "lblTitleMap";
+            this.lblTitleMap.Size = new System.Drawing.Size(67, 32);
+            this.lblTitleMap.TabIndex = 2;
+            this.lblTitleMap.Text = "Map:";
+            this.lblTitleMap.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tPanSummonerInfo
             // 
@@ -121,7 +163,7 @@
             // 
             this.panSummonerInfo.Controls.Add(this.lblEarnableChest);
             this.panSummonerInfo.Controls.Add(this.lblSummonerName);
-            this.panSummonerInfo.Controls.Add(this.lblChests);
+            this.panSummonerInfo.Controls.Add(this.lblTitleChests);
             this.panSummonerInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panSummonerInfo.Location = new System.Drawing.Point(119, 3);
             this.panSummonerInfo.Name = "panSummonerInfo";
@@ -148,16 +190,36 @@
             this.lblSummonerName.TabIndex = 2;
             this.lblSummonerName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblChests
+            // lblTitleChests
             // 
-            this.lblChests.AutoSize = true;
-            this.lblChests.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblChests.Location = new System.Drawing.Point(3, 43);
-            this.lblChests.Name = "lblChests";
-            this.lblChests.Size = new System.Drawing.Size(187, 32);
-            this.lblChests.TabIndex = 1;
-            this.lblChests.Text = "Earnable Chests:";
-            this.lblChests.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTitleChests.AutoSize = true;
+            this.lblTitleChests.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTitleChests.Location = new System.Drawing.Point(3, 43);
+            this.lblTitleChests.Name = "lblTitleChests";
+            this.lblTitleChests.Size = new System.Drawing.Size(187, 32);
+            this.lblTitleChests.TabIndex = 1;
+            this.lblTitleChests.Text = "Earnable Chests:";
+            this.lblTitleChests.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panNoChampSalect
+            // 
+            this.panNoChampSalect.Controls.Add(this.lblTitleWaiting);
+            this.panNoChampSalect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panNoChampSalect.Location = new System.Drawing.Point(0, 0);
+            this.panNoChampSalect.Name = "panNoChampSalect";
+            this.panNoChampSalect.Size = new System.Drawing.Size(800, 450);
+            this.panNoChampSalect.TabIndex = 2;
+            // 
+            // lblTitleWaiting
+            // 
+            this.lblTitleWaiting.AutoSize = true;
+            this.lblTitleWaiting.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTitleWaiting.Location = new System.Drawing.Point(172, 241);
+            this.lblTitleWaiting.Name = "lblTitleWaiting";
+            this.lblTitleWaiting.Size = new System.Drawing.Size(418, 40);
+            this.lblTitleWaiting.TabIndex = 3;
+            this.lblTitleWaiting.Text = "Waiting for Champ Select stage";
+            this.lblTitleWaiting.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // frmMain
             // 
@@ -174,10 +236,14 @@
             this.panLoLNotRunning.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picConnecting)).EndInit();
             this.panLoLIsRunning.ResumeLayout(false);
+            this.panChampSelect.ResumeLayout(false);
+            this.panChampSelect.PerformLayout();
             this.tPanSummonerInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picSummonerIcon)).EndInit();
             this.panSummonerInfo.ResumeLayout(false);
             this.panSummonerInfo.PerformLayout();
+            this.panNoChampSalect.ResumeLayout(false);
+            this.panNoChampSalect.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -191,8 +257,13 @@
         private System.Windows.Forms.TableLayoutPanel tPanSummonerInfo;
         private System.Windows.Forms.PictureBox picSummonerIcon;
         private System.Windows.Forms.Panel panSummonerInfo;
-        private System.Windows.Forms.Label lblChests;
+        private System.Windows.Forms.Label lblTitleChests;
         private System.Windows.Forms.Label lblEarnableChest;
         private System.Windows.Forms.Label lblSummonerName;
+        private System.Windows.Forms.Panel panNoChampSalect;
+        private System.Windows.Forms.Label lblTitleWaiting;
+        private System.Windows.Forms.Panel panChampSelect;
+        private System.Windows.Forms.Label lblTitleSelectedChamp;
+        private System.Windows.Forms.Label lblTitleMap;
     }
 }

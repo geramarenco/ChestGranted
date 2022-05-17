@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChestGrantedRepository.Enums
+namespace ChestGrantedRepository.LeagueClient.Enums
 {
     public enum GameFlowStates
     {
@@ -15,5 +15,6 @@ namespace ChestGrantedRepository.Enums
         GameStart,
         InProgress,
         WaitingForStats,
+        EndOfGame,
     }
 }

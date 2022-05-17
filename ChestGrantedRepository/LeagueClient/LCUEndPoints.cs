@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChestGrantedRepository
+namespace ChestGrantedRepository.LeagueClient
 {
     internal static class LCUEndPoints
     {
@@ -13,5 +13,6 @@ namespace ChestGrantedRepository
         public const string ChestEligibility = "lol-collections/v1/inventories/chest-eligibility";
         public const string GameFlow = "lol-gameflow/v1/gameflow-phase";
         public const string ChampSelectSession = "lol-champ-select/v1/session";
+        public const string SystemBuild = "system/v1/builds";
     }
 }

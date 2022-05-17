@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using ChestGrantedRepository.Enums;
+using ChestGrantedRepository.LeagueClient.Enums;
 
-namespace ChestGrantedRepository.EventsArgs
+namespace ChestGrantedRepository.LeagueClient.EventsArgs
 {
     public class GameFlowChanged
     {
