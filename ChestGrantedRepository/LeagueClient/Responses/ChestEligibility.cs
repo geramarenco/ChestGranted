@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChestGrantedRepository.LeagueClient.Responses
 {
-    public class ChestEligibility
+    class ChestEligibility
     {
         public int earnableChests { get; set; }
         public int maximumChests { get; set; }

@@ -1,4 +1,4 @@
-﻿using ChestGrantedController.Class;
+﻿using ChestGrantedRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace ChestGrantedController
         int EarnableChests { get; set; }
         string ProfilePicture { get; set; }
         bool ChampSelectStageVisible { get; set; }
-        SelectedChampion MySelectedChamp { get; set; }
-        List<SelectedChampion> MyTeamChamps { get; set; }
+        Champion MySelectedChamp { get; set; }
+        List<Champion> MyTeamChamps { get; set; }
     }
 }

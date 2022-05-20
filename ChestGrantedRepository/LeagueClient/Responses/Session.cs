@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChestGrantedRepository.LeagueClient.Responses
 {
-    public class Session
+    class Session
     {
         //public List<Action> actions { get; set; }
         public bool allowBattleBoost { get; set; }
@@ -37,7 +37,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public List<Trade> trades { get; set; }
     }
 
-    public class Action
+    class Action
     {
         public int actorCellId { get; set; }
         public int championId { get; set; }
@@ -49,26 +49,26 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public string type { get; set; }
     }
 
-    public class Bans
+    class Bans
     {
         public List<object> myTeamBans { get; set; }
         public int numBans { get; set; }
         public List<object> theirTeamBans { get; set; }
     }
 
-    public class ChatDetails
+    class ChatDetails
     {
         public string chatRoomName { get; set; }
         public object chatRoomPassword { get; set; }
     }
 
-    public class EntitledFeatureState
+    class EntitledFeatureState
     {
         public int additionalRerolls { get; set; }
         public List<object> unlockedSkinIds { get; set; }
     }
 
-    public class MyTeam
+    class MyTeam
     {
         public string assignedPosition { get; set; }
         public int cellId { get; set; }
@@ -83,7 +83,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public int wardSkinId { get; set; }
     }
 
-    public class TheirTeam
+    class TheirTeam
     {
         public string assignedPosition { get; set; }
         public int cellId { get; set; }
@@ -98,7 +98,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public int wardSkinId { get; set; }
     }
 
-    public class Timer
+    class Timer
     {
         public int adjustedTimeLeftInPhase { get; set; }
         public long internalNowInEpochMs { get; set; }
@@ -107,10 +107,17 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public int totalTimeInPhase { get; set; }
     }
 
-    public class Trade
+    class Trade
     {
         public int cellId { get; set; }
         public int id { get; set; }
         public string state { get; set; }
+
+        public enum State
+        {
+            INVALID,
+            AVAILABLE,
+        }
     }
+
 }

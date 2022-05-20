@@ -8,8 +8,4 @@
     <ProjectReference Include="..\LCUSharp\LCUSharp.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataDragon\Enums\" />
-  </ItemGroup>
-
 </Project>

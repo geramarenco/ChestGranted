@@ -41,30 +41,6 @@ namespace ChestGrantedRepository
                 SyncContext.Post(e => OnGetProfileIcon?.Invoke(this, response), null);
         }
 
-        public string GetChampionNameById(int id)
-        {
-            var champId = id.ToString();
-            if(champs == null)
-            {
-                var champsPath = $"{ResoursesPath}\\champion.json";
-                var url = $"http://ddragon.leagueoflegends.com/cdn/{Version}/data/en_US/champion.json";
-                DownloadFile(url, champsPath);
-
-                using (StreamReader r = new StreamReader("file.json"))
-                {
-                    string json = r.ReadToEnd();
-                    champs = JsonConvert.DeserializeObject<RootChampion>(json);
-                }
-            }
-
-            return "";
-        }
-
-        private void GetChampionsJson()
-        {
-        //http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json
-        }
-
         private string GetProfileIconPath(int iconId)
         {
             try
@@ -87,20 +63,84 @@ namespace ChestGrantedRepository
             }
         }
 
+        private void GetChampionsJson()
+        {
+            var champsPath = $"{ResoursesPath}\\champion.json";
+            if (!File.Exists(champsPath))
+            {
+                var url = $"http://ddragon.leagueoflegends.com/cdn/{Version}/data/en_US/champion.json";
+                DownloadFile(url, champsPath);
+            }
+
+            using (StreamReader r = new StreamReader(champsPath))
+            {
+                string json = r.ReadToEnd();
+                champs = JsonConvert.DeserializeObject<RootChampion>(json);
+            }
+        }
+
+        public Champion GetChampionData(int id)
+        {
+            var champId = id.ToString();
+            if (champs == null) GetChampionsJson();
+
+            var filteredChamp = champs.Data.Where(x => x.Value.key == champId).FirstOrDefault();
+            DataDragon.Responses.Champion champ = filteredChamp.Value;
+            var filePath = $"{ResoursesPath}\\{champ.image.full}";
+            if (!File.Exists(filePath))
+            {
+                var url = $"http://ddragon.leagueoflegends.com/cdn/{Version}/img/champion/{champ.image.full}";
+                DownloadFile(url, filePath);
+            }
+
+            var result = new Champion()
+            {
+                Id = int.Parse(champ.key),
+                PictureName = champ.image.full,
+                Name = champ.name,
+                PicturePath = filePath,
+            };
+
+            return result;
+        }
+
+        public List<Champion> GetChampionData(List<int> ids)
+        {
+            var result = new List<Champion>();
+            var champIds = ids.Select(x => x.ToString()).ToList();
+            if (champs == null) GetChampionsJson();
+
+            var filteredChamps = champs.Data.Where(x => champIds.Contains(x.Value.key)).ToList();
+            List<DataDragon.Responses.Champion> champions = filteredChamps.Select(x => x.Value).ToList();
+
+            foreach (var c in champions)
+            {
+                var filePath = $"{ResoursesPath}\\{c.image.full}";
+
+                if (!File.Exists(filePath))
+                {
+                    var url = $"http://ddragon.leagueoflegends.com/cdn/{Version}/img/champion/{c.image.full}";
+                    DownloadFile(url, filePath);
+                }
+                var champ = new Champion()
+                {
+                    Id = int.Parse(c.key),
+                    PictureName = c.image.full,
+                    Name = c.name,
+                    PicturePath = filePath,
+                };
+
+                result.Add(champ);
+            }
+
+            return result;
+        }
+
         private void DownloadFile(string url, string fileName)
         {
             using (var client = new WebClient())
             {
                 client.DownloadFile(url, fileName);
-            }
-        }
-
-        private void LoadJson()
-        {
-            using (StreamReader r = new StreamReader("file.json"))
-            {
-                string json = r.ReadToEnd();
-                RootChampion champs = JsonConvert.DeserializeObject<RootChampion>(json);
             }
         }
     }

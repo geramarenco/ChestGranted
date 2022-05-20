@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ChestGrantedRepository
 {
@@ -21,7 +22,7 @@ namespace ChestGrantedRepository
         // Public Events, events who listen the controller (who has some instance of this class)
         public event EventHandler<LeagueClientStatusChange> OnLeagueClientStatusChange;
         public event EventHandler<GameFlowChanged> OnGameFlowChanged;
-        public event EventHandler<Session> OnChampSelectedChanged;
+        public event EventHandler<ChampionPool> OnChampSelectedChanged;
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
@@ -95,6 +96,13 @@ namespace ChestGrantedRepository
             return new GameFlowChanged(Helpers.GetStateFromString(strState));
         }
 
+        public async Task<ChampionPool> GetCurrentSelectedChamp()
+        {
+            var json = await api.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, LCUEndPoints.ChampSelectSession);
+            ChampionPool result = JsonSerializer.Deserialize<ChampionPool>(json);
+            return result;
+        }
+
         public async Task GetCurrentSummoner()
         {
             var result = await api.RequestHandler.GetResponseAsync<CurrentSummoner>(HttpMethod.Get, LCUEndPoints.CurrentSummoner);
@@ -130,7 +138,33 @@ namespace ChestGrantedRepository
         private void _ChampSelectedChanged(object sender, LeagueEvent e)
         {
             var data = e.Data.ToString();
-            var response = JsonSerializer.Deserialize<Session>(data);
+            var session = JsonSerializer.Deserialize<Session>(data);
+            ChampionPool response = new ChampionPool();
+
+            foreach (MyTeam t in session.myTeam)
+            {
+                var champ = new Champion()
+                {
+                    Id = t.championId,
+                    AssignedPosition = t.assignedPosition,
+                    SummonerId = t.summonerId,
+                };
+
+                // TODO response.AddChamp(champ);
+                response.SelectedChampions.Add(champ);
+            }
+
+            foreach (Trade item in session.trades)
+            {
+                if (item.state == Trade.State.AVAILABLE.ToString())
+                {
+                    var champ = new AvailableTrade()
+                    {
+                        ChampionId = item.id,
+                    };
+                    response.AvailableTrades.Add(champ);
+                }
+            }
 
             // fires my public event to indicate the game flow
             SyncContext.Post(e => OnChampSelectedChanged?.Invoke(this, response), null);

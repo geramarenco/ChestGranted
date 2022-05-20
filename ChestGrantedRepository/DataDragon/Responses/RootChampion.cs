@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ChestGrantedRepository.DataDragon.Responses
 {
-    public class RootChampion
+    class RootChampion
     {
         public string Type { get; set; }
         public string Version { get; set; }
         public Dictionary<string, Champion> Data { get; set; }
     }
 
-    public class Champion
+    class Champion
     {
         public string version { get; set; }
         public string id { get; set; }
@@ -28,7 +28,7 @@ namespace ChestGrantedRepository.DataDragon.Responses
         public Stats stats { get; set; }
     }
 
-    public class Image
+    class Image
     {
         public string full { get; set; }
         public string sprite { get; set; }
@@ -39,7 +39,7 @@ namespace ChestGrantedRepository.DataDragon.Responses
         public int h { get; set; }
     }
 
-    public class Info
+    class Info
     {
         public int attack { get; set; }
         public int defense { get; set; }
@@ -47,7 +47,7 @@ namespace ChestGrantedRepository.DataDragon.Responses
         public int difficulty { get; set; }
     }
 
-    public class Stats
+    class Stats
     {
         public double hp { get; set; }
         public double hpperlevel { get; set; }

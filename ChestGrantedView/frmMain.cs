@@ -1,5 +1,5 @@
 ﻿using ChestGrantedController;
-using ChestGrantedController.Class;
+using ChestGrantedRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,15 +31,17 @@ namespace ChestGrantedView
             panLoLNotRunning.BackColor = Colors.BackColor;
             panLoLIsRunning.BackColor = Colors.BackColor;
             panSummonerInfo.BackColor = Colors.BackColor;
+            lstMyTeamChamps.BackColor = Colors.BackColor;
 
             lblConnecting.ForeColor = Colors.ForeColor;
             lblEarnableChest.ForeColor = Colors.ForeColor;
             lblSummonerName.ForeColor = Colors.ForeColor;
+            lblMyChampName.ForeColor = Colors.ForeColor;
 
             lblTitleChests.ForeColor = Colors.ForeColor;
             lblTitleWaiting.ForeColor = Colors.ForeColor;
-            lblTitleMap.ForeColor = Colors.ForeColor;
             lblTitleSelectedChamp.ForeColor = Colors.ForeColor;
+            lblTitlePoolOfChamps.ForeColor = Colors.ForeColor;
         }
 
         public bool LoLIsRunning
@@ -75,25 +77,60 @@ namespace ChestGrantedView
         }
 
         public bool ChampSelectStageVisible {
-            get => panChampSelect.Visible;
+            get => panARAMChampSelect.Visible;
             set
             {
                 panNoChampSalect.Visible = !value;
-                panChampSelect.Visible = value;
+                panARAMChampSelect.Visible = value;
             }
 
         }
 
-        SelectedChampion _mySelectedChamp;
-        public SelectedChampion MySelectedChamp { 
+        Champion _mySelectedChamp;
+        public Champion MySelectedChamp
+        { 
             get => _mySelectedChamp;
-            set => _mySelectedChamp = value;
+            set
+            {
+                _mySelectedChamp = value;
+                picSelectedChamp.Image = null;
+                lblMyChampName.Text = "";
+                
+                if (_mySelectedChamp == null) return;
+                
+                if (!imgChamps.Images.ContainsKey(_mySelectedChamp.PictureName))
+                    imgChamps.Images.Add(_mySelectedChamp.PictureName, Image.FromFile(_mySelectedChamp.PicturePath));
+
+                picSelectedChamp.Image = imgChamps.Images[_mySelectedChamp.PictureName];
+                lblMyChampName.Text = _mySelectedChamp.Name;
+            }
         }
 
-        List<SelectedChampion> _myTeamChamps;
-        public List<SelectedChampion> MyTeamChamps {
+        List<Champion> _myTeamChamps;
+        public List<Champion> MyTeamChamps {
             get => _myTeamChamps;
-            set => _myTeamChamps = value;
+            set
+            {
+                _myTeamChamps = value;
+                lstMyTeamChamps.Items.Clear();
+
+                if (_myTeamChamps == null) return;
+
+                foreach (var c in _myTeamChamps)
+                {
+                    if (!imgChamps.Images.ContainsKey(c.PictureName))
+                        imgChamps.Images.Add(c.PictureName, Image.FromFile(c.PicturePath));
+
+                    var item = new ListViewItem()
+                    {
+                        ForeColor = Colors.ForeColor,
+                        ImageKey = c.PictureName,
+                        Text = c.Name,
+                    };
+                    lstMyTeamChamps.Items.Add(item);
+                }
+
+            }
         }
     }
 }

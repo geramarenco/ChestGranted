@@ -28,14 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.panLoLNotRunning = new System.Windows.Forms.Panel();
             this.lblConnecting = new System.Windows.Forms.Label();
             this.picConnecting = new System.Windows.Forms.PictureBox();
             this.panLoLIsRunning = new System.Windows.Forms.Panel();
-            this.panChampSelect = new System.Windows.Forms.Panel();
+            this.panARAMChampSelect = new System.Windows.Forms.Panel();
+            this.lblMyChampName = new System.Windows.Forms.Label();
+            this.lblTitlePoolOfChamps = new System.Windows.Forms.Label();
+            this.lstMyTeamChamps = new System.Windows.Forms.ListView();
+            this.imgChamps = new System.Windows.Forms.ImageList(this.components);
+            this.picSelectedChamp = new System.Windows.Forms.PictureBox();
             this.lblTitleSelectedChamp = new System.Windows.Forms.Label();
-            this.lblTitleMap = new System.Windows.Forms.Label();
             this.tPanSummonerInfo = new System.Windows.Forms.TableLayoutPanel();
             this.picSummonerIcon = new System.Windows.Forms.PictureBox();
             this.panSummonerInfo = new System.Windows.Forms.Panel();
@@ -47,7 +52,8 @@
             this.panLoLNotRunning.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picConnecting)).BeginInit();
             this.panLoLIsRunning.SuspendLayout();
-            this.panChampSelect.SuspendLayout();
+            this.panARAMChampSelect.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSelectedChamp)).BeginInit();
             this.tPanSummonerInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSummonerIcon)).BeginInit();
             this.panSummonerInfo.SuspendLayout();
@@ -90,7 +96,7 @@
             // 
             // panLoLIsRunning
             // 
-            this.panLoLIsRunning.Controls.Add(this.panChampSelect);
+            this.panLoLIsRunning.Controls.Add(this.panARAMChampSelect);
             this.panLoLIsRunning.Controls.Add(this.tPanSummonerInfo);
             this.panLoLIsRunning.Controls.Add(this.panNoChampSalect);
             this.panLoLIsRunning.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -100,38 +106,77 @@
             this.panLoLIsRunning.TabIndex = 1;
             this.panLoLIsRunning.Visible = false;
             // 
-            // panChampSelect
+            // panARAMChampSelect
             // 
-            this.panChampSelect.Controls.Add(this.lblTitleSelectedChamp);
-            this.panChampSelect.Controls.Add(this.lblTitleMap);
-            this.panChampSelect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panChampSelect.Location = new System.Drawing.Point(0, 109);
-            this.panChampSelect.Name = "panChampSelect";
-            this.panChampSelect.Size = new System.Drawing.Size(800, 341);
-            this.panChampSelect.TabIndex = 2;
-            this.panChampSelect.Visible = false;
+            this.panARAMChampSelect.Controls.Add(this.lblMyChampName);
+            this.panARAMChampSelect.Controls.Add(this.lblTitlePoolOfChamps);
+            this.panARAMChampSelect.Controls.Add(this.lstMyTeamChamps);
+            this.panARAMChampSelect.Controls.Add(this.picSelectedChamp);
+            this.panARAMChampSelect.Controls.Add(this.lblTitleSelectedChamp);
+            this.panARAMChampSelect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panARAMChampSelect.Location = new System.Drawing.Point(0, 109);
+            this.panARAMChampSelect.Name = "panARAMChampSelect";
+            this.panARAMChampSelect.Size = new System.Drawing.Size(800, 341);
+            this.panARAMChampSelect.TabIndex = 2;
+            this.panARAMChampSelect.Visible = false;
+            // 
+            // lblMyChampName
+            // 
+            this.lblMyChampName.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblMyChampName.Location = new System.Drawing.Point(12, 161);
+            this.lblMyChampName.Name = "lblMyChampName";
+            this.lblMyChampName.Size = new System.Drawing.Size(188, 32);
+            this.lblMyChampName.TabIndex = 7;
+            this.lblMyChampName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblTitlePoolOfChamps
+            // 
+            this.lblTitlePoolOfChamps.AutoSize = true;
+            this.lblTitlePoolOfChamps.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTitlePoolOfChamps.Location = new System.Drawing.Point(221, 3);
+            this.lblTitlePoolOfChamps.Name = "lblTitlePoolOfChamps";
+            this.lblTitlePoolOfChamps.Size = new System.Drawing.Size(178, 32);
+            this.lblTitlePoolOfChamps.TabIndex = 6;
+            this.lblTitlePoolOfChamps.Text = "Others Champs";
+            this.lblTitlePoolOfChamps.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lstMyTeamChamps
+            // 
+            this.lstMyTeamChamps.BackColor = System.Drawing.SystemColors.Control;
+            this.lstMyTeamChamps.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstMyTeamChamps.HideSelection = false;
+            this.lstMyTeamChamps.LargeImageList = this.imgChamps;
+            this.lstMyTeamChamps.Location = new System.Drawing.Point(221, 38);
+            this.lstMyTeamChamps.Name = "lstMyTeamChamps";
+            this.lstMyTeamChamps.Size = new System.Drawing.Size(567, 291);
+            this.lstMyTeamChamps.TabIndex = 5;
+            this.lstMyTeamChamps.UseCompatibleStateImageBehavior = false;
+            // 
+            // imgChamps
+            // 
+            this.imgChamps.ColorDepth = System.Windows.Forms.ColorDepth.Depth16Bit;
+            this.imgChamps.ImageSize = new System.Drawing.Size(120, 120);
+            this.imgChamps.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // picSelectedChamp
+            // 
+            this.picSelectedChamp.Location = new System.Drawing.Point(12, 38);
+            this.picSelectedChamp.Name = "picSelectedChamp";
+            this.picSelectedChamp.Size = new System.Drawing.Size(188, 120);
+            this.picSelectedChamp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picSelectedChamp.TabIndex = 4;
+            this.picSelectedChamp.TabStop = false;
             // 
             // lblTitleSelectedChamp
             // 
             this.lblTitleSelectedChamp.AutoSize = true;
             this.lblTitleSelectedChamp.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblTitleSelectedChamp.Location = new System.Drawing.Point(12, 62);
+            this.lblTitleSelectedChamp.Location = new System.Drawing.Point(12, 3);
             this.lblTitleSelectedChamp.Name = "lblTitleSelectedChamp";
-            this.lblTitleSelectedChamp.Size = new System.Drawing.Size(193, 32);
+            this.lblTitleSelectedChamp.Size = new System.Drawing.Size(188, 32);
             this.lblTitleSelectedChamp.TabIndex = 3;
-            this.lblTitleSelectedChamp.Text = "Selected Champ:";
+            this.lblTitleSelectedChamp.Text = "Selected Champ";
             this.lblTitleSelectedChamp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblTitleMap
-            // 
-            this.lblTitleMap.AutoSize = true;
-            this.lblTitleMap.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblTitleMap.Location = new System.Drawing.Point(12, 14);
-            this.lblTitleMap.Name = "lblTitleMap";
-            this.lblTitleMap.Size = new System.Drawing.Size(67, 32);
-            this.lblTitleMap.TabIndex = 2;
-            this.lblTitleMap.Text = "Map:";
-            this.lblTitleMap.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tPanSummonerInfo
             // 
@@ -236,8 +281,9 @@
             this.panLoLNotRunning.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picConnecting)).EndInit();
             this.panLoLIsRunning.ResumeLayout(false);
-            this.panChampSelect.ResumeLayout(false);
-            this.panChampSelect.PerformLayout();
+            this.panARAMChampSelect.ResumeLayout(false);
+            this.panARAMChampSelect.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSelectedChamp)).EndInit();
             this.tPanSummonerInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picSummonerIcon)).EndInit();
             this.panSummonerInfo.ResumeLayout(false);
@@ -262,8 +308,12 @@
         private System.Windows.Forms.Label lblSummonerName;
         private System.Windows.Forms.Panel panNoChampSalect;
         private System.Windows.Forms.Label lblTitleWaiting;
-        private System.Windows.Forms.Panel panChampSelect;
+        private System.Windows.Forms.Panel panARAMChampSelect;
         private System.Windows.Forms.Label lblTitleSelectedChamp;
-        private System.Windows.Forms.Label lblTitleMap;
+        private System.Windows.Forms.PictureBox picSelectedChamp;
+        private System.Windows.Forms.Label lblTitlePoolOfChamps;
+        private System.Windows.Forms.ListView lstMyTeamChamps;
+        private System.Windows.Forms.ImageList imgChamps;
+        private System.Windows.Forms.Label lblMyChampName;
     }
 }

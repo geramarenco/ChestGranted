@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChestGrantedRepository.LeagueClient.Responses
 {
-    public class CurrentSummoner
+    class CurrentSummoner
     {
         public int accountId { get; set; }
         public string displayName { get; set; }
@@ -24,7 +24,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public int xpUntilNextLevel { get; set; }
     }
 
-    public class RerollPointsDto
+    class RerollPointsDto
     {
         public int currentPoints { get; set; }
         public int maxRolls { get; set; }
