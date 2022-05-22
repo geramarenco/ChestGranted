@@ -101,7 +101,10 @@ namespace ChestGrantedView
                 if (!imgChamps.Images.ContainsKey(_mySelectedChamp.PictureName))
                     imgChamps.Images.Add(_mySelectedChamp.PictureName, Image.FromFile(_mySelectedChamp.PicturePath));
 
-                picSelectedChamp.Image = imgChamps.Images[_mySelectedChamp.PictureName];
+                if(_mySelectedChamp.ChestEarned)
+                    picSelectedChamp.Image = Helpers.MakeGrayscale(imgChamps.Images[_mySelectedChamp.PictureName]);
+                else
+                    picSelectedChamp.Image = imgChamps.Images[_mySelectedChamp.PictureName];
                 lblMyChampName.Text = _mySelectedChamp.Name;
             }
         }
@@ -119,12 +122,15 @@ namespace ChestGrantedView
                 foreach (var c in _myTeamChamps)
                 {
                     if (!imgChamps.Images.ContainsKey(c.PictureName))
+                    {
                         imgChamps.Images.Add(c.PictureName, Image.FromFile(c.PicturePath));
+                        imgChamps.Images.Add($"Gray{c.PictureName}", Helpers.MakeGrayscale(Image.FromFile(c.PicturePath)));
+                    }
 
                     var item = new ListViewItem()
                     {
                         ForeColor = Colors.ForeColor,
-                        ImageKey = c.PictureName,
+                        ImageKey = c.ChestEarned ? $"Gray{c.PictureName}" : c.PictureName,
                         Text = c.Name,
                     };
                     lstMyTeamChamps.Items.Add(item);
