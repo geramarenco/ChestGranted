@@ -41,17 +41,17 @@ namespace LCUSharp.Http
         }
 
         /// <inheritdoc />
-        public async Task<string> GetJsonResponseAsync(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters = null)
+        public async Task<string> GetJsonResponseAsync(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters = null, bool ensureSuccessStatusCode = true)
         {
-            return await GetJsonResponseAsync<object>(httpMethod, relativeUrl, queryParameters, null).ConfigureAwait(false);
+            return await GetJsonResponseAsync<object>(httpMethod, relativeUrl, queryParameters, null, ensureSuccessStatusCode).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<string> GetJsonResponseAsync<TRequest>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TRequest body)
+        public async Task<string> GetJsonResponseAsync<TRequest>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TRequest body, bool ensureSuccessStatusCode = true)
         {
             var request = await PrepareRequestAsync(httpMethod, relativeUrl, queryParameters, body).ConfigureAwait(false);
             var response = await HttpClient.SendAsync(request).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+            if(ensureSuccessStatusCode) response.EnsureSuccessStatusCode();
             return await GetResponseContentAsync(response).ConfigureAwait(false);
         }
 

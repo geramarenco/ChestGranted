@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChestGrantedRepository.RiotApi.EventArgs
+namespace ChestGrantedRepository.RiotApi.Response
 {
-    public class ChampionMastery
+    class ChampionMastery
     {
         public int championId { get; set; }
         public int championLevel { get; set; }

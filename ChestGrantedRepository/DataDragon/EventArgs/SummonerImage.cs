@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChestGrantedRepository.LeagueClient.EventsArgs
+namespace ChestGrantedRepository.DataDragon.Responses
 {
     public class SummonerImage
     {

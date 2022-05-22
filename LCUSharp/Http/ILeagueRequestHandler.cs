@@ -33,7 +33,7 @@ namespace LCUSharp.Http
         /// <param name="relativeUrl">The relative url.</param>
         /// <param name="queryParameters">The query parameters.</param>
         /// <returns>The <see cref="HttpResponseMessage"/>'s content.</returns>
-        Task<string> GetJsonResponseAsync(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters = null);
+        Task<string> GetJsonResponseAsync(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters = null, bool ensureSuccessStatusCode = true);
 
         /// <summary>
         /// Creates and sends a new <see cref="HttpRequestMessage"/> and returns the <see cref="HttpResponseMessage"/>'s content.
@@ -44,7 +44,7 @@ namespace LCUSharp.Http
         /// <param name="queryParameters">The query parameters.</param>
         /// <param name="body">The request's body.</param>
         /// <returns>The <see cref="HttpResponseMessage"/>'s content.</returns>
-        Task<string> GetJsonResponseAsync<TRequest>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TRequest body);
+        Task<string> GetJsonResponseAsync<TRequest>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TRequest body, bool ensureSuccessStatusCode = true);
 
         /// <summary>
         /// Creates and sends a new <see cref="HttpRequestMessage"/> and deserializes the <see cref="HttpResponseMessage"/>'s content (json) as <typeparamref name="TResponse"/>.

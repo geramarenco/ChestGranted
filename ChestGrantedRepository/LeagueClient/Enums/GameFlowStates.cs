@@ -16,5 +16,6 @@ namespace ChestGrantedRepository.LeagueClient.Enums
         InProgress,
         WaitingForStats,
         EndOfGame,
+        PreEndOfGame,
     }
 }
