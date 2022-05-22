@@ -8,7 +8,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
 {
     class Session
     {
-        //public List<Action> actions { get; set; }
+        public List<object> actions { get; set; }
         public bool allowBattleBoost { get; set; }
         public bool allowDuplicatePicks { get; set; }
         public bool allowLockedEvents { get; set; }
@@ -28,11 +28,11 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public bool isSpectating { get; set; }
         public int localPlayerCellId { get; set; }
         public int lockedEventIndex { get; set; }
-        public List<MyTeam> myTeam { get; set; }
+        public List<Team> myTeam { get; set; }
         public int recoveryCounter { get; set; }
         public int rerollsRemaining { get; set; }
         public bool skipChampionSelect { get; set; }
-        public List<TheirTeam> theirTeam { get; set; }
+        public List<Team> theirTeam { get; set; }
         public Timer timer { get; set; }
         public List<Trade> trades { get; set; }
     }
@@ -68,7 +68,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public List<object> unlockedSkinIds { get; set; }
     }
 
-    class MyTeam
+    class Team
     {
         public string assignedPosition { get; set; }
         public int cellId { get; set; }
@@ -78,22 +78,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public int selectedSkinId { get; set; }
         public double spell1Id { get; set; }
         public double spell2Id { get; set; }
-        public long summonerId { get; set; }
-        public int team { get; set; }
-        public int wardSkinId { get; set; }
-    }
-
-    class TheirTeam
-    {
-        public string assignedPosition { get; set; }
-        public int cellId { get; set; }
-        public int championId { get; set; }
-        public int championPickIntent { get; set; }
-        public string entitledFeatureType { get; set; }
-        public int selectedSkinId { get; set; }
-        public double spell1Id { get; set; }
-        public double spell2Id { get; set; }
-        public long summonerId { get; set; }
+        public double summonerId { get; set; }
         public int team { get; set; }
         public int wardSkinId { get; set; }
     }

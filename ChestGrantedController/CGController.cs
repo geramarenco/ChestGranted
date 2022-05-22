@@ -21,9 +21,11 @@ namespace ChestGrantedController
         private IRiotHandler riotHandler;
 
         private SummonerInfo summoner = null;
-        private GameMode currentMap;
+        private GameMode currentMode;
         private string region = string.Empty;
         private bool HasChampionsGrantedChestUpdated = false;
+
+        private List<int> allChamps;
 
         public CGController(IChestGrantedView view)
         {
@@ -37,13 +39,12 @@ namespace ChestGrantedController
             LCUHandler.OnGetChestEligibility += OnGetChestEligibility;
             LCUHandler.OnChampSelectedChanged += OnChampSelectedChanged;
             LCUHandler.OnGetSystemBuild += OnGetSystemBuild;
-            LCUHandler.OnGetLobbyStatus += OnGetLobbyStatus;
 
             ConnectLC();
-            InitialiceRiotApi();
+            InitializeRiotApi();
         }
 
-        private async void InitialiceRiotApi()
+        private async void InitializeRiotApi()
         {
             if (riotHandler != null) return;
             if (region == string.Empty) return;
@@ -62,7 +63,7 @@ namespace ChestGrantedController
             if (objRegion != null)
             {
                 region = objRegion.summonerRegion;
-                InitialiceRiotApi();
+                InitializeRiotApi();
             }
         }
 
@@ -115,6 +116,8 @@ namespace ChestGrantedController
         {
             view.EarnableChests = 0;
             view.SummonerName = "";
+            view.MySelectedChamp = null;
+            view.PickableChampions = null;
         }
 
         private void UpdateChestInfo()
@@ -137,7 +140,7 @@ namespace ChestGrantedController
             summoner = e;
             view.SummonerName = e.displayName;
             GetProfileIcon(e.profileIconId);
-            InitialiceRiotApi();
+            InitializeRiotApi();
         }
 
         private void GetProfileIcon(int profileIconId)
@@ -155,13 +158,13 @@ namespace ChestGrantedController
         {
             if (e.State == GameFlowStates.ChampSelect)
             {
+                if (allChamps == null) allChamps = new List<int>();
                 view.ChampSelectStageVisible = true;
-                LCUHandler.SubscribeToChampSelected();
             }
             else
             {
+                allChamps = null;
                 view.ChampSelectStageVisible = false;
-                LCUHandler.UnsubscribeToChampSelected();
             }
 
             if (e.State == GameFlowStates.WaitingForStats)
@@ -173,71 +176,102 @@ namespace ChestGrantedController
                 
         }
 
-        private async void OnChampSelectedChanged(object sender, ChampionPool e)
+        private void OnChampSelectedChanged(object sender, ChampionPool e)
+        {
+            // TODO get map info to for improve of displayed data
+            ARAMSettings(e.SelectedChampions, e.BenchChampions);
+        }
+
+        private async void ARAMSettings(List<Champion> teamSelecction, List<BenchChampion> benchChampions)
         {
             // getting champs selected from all my team
             var champs = new List<Champion>();
-            champs.AddRange(e.SelectedChampions);
+            champs.AddRange(teamSelecction);
+            // remove summoner with out champ selected
             champs.RemoveAll(x => x.Id == 0);
 
             if (!champs.Any())
             {
                 view.MySelectedChamp = null;
-                view.MyTeamChamps = null;
+                view.PickableChampions = null;
                 return;
             }
 
+            // crete a list of ids for collect data
             var ids = champs.Where(x => x.Id != 0).Select(x => x.Id).ToList();
-            ids.AddRange(e.AvailableTrades.Select(x => x.ChampionId).ToList());
+            // add to list the champs on the bench
+            ids.AddRange(benchChampions.Select(x => x.ChampionId).ToList());
 
-            var champsData = dragonHandler.GetChampionData(ids);
+            // --- NEW
+            // save all champs
+            if (ids.Any() && allChamps != null)
+            {
+                allChamps.AddRange(ids);
+                allChamps = allChamps.Distinct().ToList();
+            }
+
+            // --- END NEW
+
+            // get data of champs from DataDragon
+            var champsData = dragonHandler.GetChampionData(allChamps);
             if (!HasChampionsGrantedChestUpdated)
                 await riotHandler.UpdateAllChestGranted();
 
-            var chestsGranted = riotHandler.GetChestGrantedById(ids);
+            // get data of chest granted from Riot Api
+            var chestsGranted = riotHandler.GetChestGrantedById(allChamps);
 
-
+            // fecht data to my list of champs
             foreach (Champion c in champs)
             {
-                var foundChamp = champsData.FirstOrDefault(x => x.Id == c.Id);
-                if (foundChamp == null)
-                    Console.WriteLine("whyyyy");
-                else
+                var ddChamp = champsData.FirstOrDefault(x => x.Id == c.Id);
+                if (ddChamp != null)
                 {
-                    c.Name = foundChamp.Name;
-                    c.PictureName = foundChamp.PictureName;
-                    c.PicturePath = foundChamp.PicturePath;
-                    c.ChestEarned = chestsGranted.FirstOrDefault(x => x.Id == c.Id).ChestEarned;
+                    c.Name = ddChamp.Name;
+                    c.PictureName = ddChamp.PictureName;
+                    c.PicturePath = ddChamp.PicturePath;
                 }
+
+                var riotChamp = chestsGranted.FirstOrDefault(x => x.Id == c.Id);
+                if (riotChamp != null)
+                    c.ChestEarned = riotChamp.ChestEarned;
             }
 
-            // getting champs from posible trades
-            var trades = new List<Champion>();
-            trades.AddRange(e.AvailableTrades.Select(x => new Champion() { Id = x.ChampionId}).ToList());
-
-            foreach (Champion c in trades)
+            // --- NEW
+            // add missing champs to list
+            if (allChamps.Any())
             {
-                var foundChamp = champsData.FirstOrDefault(x => x.Id == c.Id);
-                if (foundChamp == null)
-                    Console.WriteLine("whyyyy");
-                else
+                var missingChamps = allChamps.Where(x => !ids.Contains(x)).ToList();
+                foreach (var id in missingChamps)
                 {
-                    c.SummonerId = 0;
-                    c.Name = foundChamp.Name;
-                    c.PictureName = foundChamp.PictureName;
-                    c.PicturePath = foundChamp.PicturePath;
-                    c.ChestEarned = chestsGranted.FirstOrDefault(x => x.Id == c.Id).ChestEarned;
+                    var champ = new Champion();
+
+                    var found = false;
+                    var ddChamp = champsData.FirstOrDefault(x => x.Id == id);
+                    if (ddChamp != null)
+                    {
+                        champ.Name = ddChamp.Name;
+                        champ.PictureName = ddChamp.PictureName;
+                        champ.PicturePath = ddChamp.PicturePath;
+                        found = true;
+                    }
+
+                    var riotChamp = chestsGranted.FirstOrDefault(x => x.Id == id);
+                    if (riotChamp != null)
+                        champ.ChestEarned = riotChamp.ChestEarned;
+
+                    if (found) champs.Add(champ);
                 }
             }
+            // --- END NEW
 
             view.MySelectedChamp = champs.FirstOrDefault(x => x.SummonerId == summoner.summonerId);
             champs.RemoveAll(x => x.SummonerId == summoner.summonerId);
-            view.MyTeamChamps = champs;
+            view.PickableChampions = champs;
         }
 
         private void OnGetLobbyStatus(object sender, LobbyStatus e)
         {
-            currentMap = e.GameSelected;
+            currentMode = e.GameSelected;
         }
 
         private void OnUpdateAllChestGranted(object sender, List<Champion> e)

@@ -9,7 +9,7 @@ namespace ChestGrantedRepository
 {
     public class Champion
     {
-        public long SummonerId { get; set; }
+        public double SummonerId { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string PicturePath { get; set; }

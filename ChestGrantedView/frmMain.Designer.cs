@@ -142,8 +142,10 @@
             // 
             // lstMyTeamChamps
             // 
+            this.lstMyTeamChamps.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstMyTeamChamps.BackColor = System.Drawing.SystemColors.Control;
-            this.lstMyTeamChamps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lstMyTeamChamps.HideSelection = false;
             this.lstMyTeamChamps.LargeImageList = this.imgChamps;
             this.lstMyTeamChamps.Location = new System.Drawing.Point(221, 38);

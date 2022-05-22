@@ -22,7 +22,6 @@ namespace ChestGrantedRepository.LeagueClient
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
-        public event EventHandler<LobbyStatus> OnGetLobbyStatus;
 
         public Task Connect();
         public Task GetSystemBuild();
@@ -30,8 +29,6 @@ namespace ChestGrantedRepository.LeagueClient
         public Task<ChampionPool> GetCurrentSelectedChamp();
         public Task GetCurrentSummoner();
         public Task GetChestEligibility();
-        public void SubscribeToChampSelected();
-        public void UnsubscribeToChampSelected();
         public Task<Region> ExperimentalGetRegion();
     }
 }

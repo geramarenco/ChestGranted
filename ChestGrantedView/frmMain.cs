@@ -109,17 +109,18 @@ namespace ChestGrantedView
             }
         }
 
-        List<Champion> _myTeamChamps;
-        public List<Champion> MyTeamChamps {
-            get => _myTeamChamps;
+        List<Champion> _pickableChampions;
+        public List<Champion> PickableChampions
+        {
+            get => _pickableChampions;
             set
             {
-                _myTeamChamps = value;
+                _pickableChampions = value;
                 lstMyTeamChamps.Items.Clear();
 
-                if (_myTeamChamps == null) return;
+                if (_pickableChampions == null) return;
 
-                foreach (var c in _myTeamChamps)
+                foreach (var c in _pickableChampions)
                 {
                     if (!imgChamps.Images.ContainsKey(c.PictureName))
                     {

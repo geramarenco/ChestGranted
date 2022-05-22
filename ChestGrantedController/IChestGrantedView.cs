@@ -15,6 +15,6 @@ namespace ChestGrantedController
         string ProfilePicture { get; set; }
         bool ChampSelectStageVisible { get; set; }
         Champion MySelectedChamp { get; set; }
-        List<Champion> MyTeamChamps { get; set; }
+        List<Champion> PickableChampions { get; set; }
     }
 }

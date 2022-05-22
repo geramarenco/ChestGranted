@@ -28,14 +28,14 @@ namespace ChestGrantedRepository.LeagueClient.EventsArgs
         public ChampionPool()
         {
             SelectedChampions = new List<Champion>();
-            AvailableTrades = new List<AvailableTrade>();
+            BenchChampions = new List<BenchChampion>();
         } 
 
         public List<Champion> SelectedChampions { get; set; }
-        public List<AvailableTrade> AvailableTrades { get; set; }
+        public List<BenchChampion> BenchChampions { get; set; }
     }
 
-    public class AvailableTrade
+    public class BenchChampion
     {
         public int ChampionId { get; set; }
     }

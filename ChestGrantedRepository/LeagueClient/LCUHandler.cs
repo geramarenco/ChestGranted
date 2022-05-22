@@ -26,11 +26,13 @@ namespace ChestGrantedRepository.LeagueClient
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
-        public event EventHandler<LobbyStatus> OnGetLobbyStatus;
 
         // Private Events, event who listen by my selft (subscribe to accions of LCU)
         private event EventHandler<LeagueEvent> GameFlowChanged;
         private event EventHandler<LeagueEvent> ChampSelectedChanged;
+
+        // for manager bench champs on aram
+        private List<BenchChampion> benchChampions;
 
         public LCUHandler()
         {
@@ -56,14 +58,12 @@ namespace ChestGrantedRepository.LeagueClient
             {
                 // Initialize a connection to the league client.
                 api = await LeagueClientApi.ConnectAsync();
+
                 api.Disconnected += _GameDisconected;
 
                 // subscribed event = my event handler
-                GameFlowChanged += _GameFlowChanged;
-                ChampSelectedChanged += _ChampSelectedChanged;
-
-                // start listening that event
-                api.EventHandler.Subscribe($"/{LCUEndPoints.GameFlow}", GameFlowChanged);
+                SubscribeToGameFlow();
+                SubscribeToChampSelected();
 
                 // fires my public event to indicate LCU is running
                 var response = new LeagueClientStatusChange(true);
@@ -76,6 +76,111 @@ namespace ChestGrantedRepository.LeagueClient
             }
         }
 
+        #region Subscribe Methods
+        private void SubscribeToGameFlow()
+        {
+            GameFlowChanged += _GameFlowChanged;
+            api.EventHandler.Subscribe($"/{LCUEndPoints.GameFlow}", GameFlowChanged);
+        }
+
+        private void UnsubscribeToGameFlow()
+        {
+            GameFlowChanged -= _GameFlowChanged;
+            api.EventHandler.Unsubscribe($"/{LCUEndPoints.GameFlow}");
+        }
+
+        public void SubscribeToChampSelected()
+        {
+            ChampSelectedChanged += _ChampSelectedChanged;
+            api.EventHandler.Subscribe($"/{LCUEndPoints.ChampSelectSession}", ChampSelectedChanged);
+        }
+
+        public void UnsubscribeToChampSelected()
+        {
+            ChampSelectedChanged -= _ChampSelectedChanged;
+            api.EventHandler.Unsubscribe($"/{LCUEndPoints.ChampSelectSession}");
+        }
+
+        #endregion
+
+        #region LCU Events Handler
+        private void _GameDisconected(object sender, EventArgs e)
+        {
+            try
+            {
+                // fires my public event to indicate LCU is NOT running
+                var response = new LeagueClientStatusChange(false);
+                SyncContext.Post(e => OnLeagueClientStatusChange?.Invoke(this, response), null);
+            }
+            catch (Exception ex)
+            {
+                Helpers.Log($"{GetType().Name}._GameDisconected - {ex.Message}");
+                throw;
+            }
+        }
+
+        private void _GameFlowChanged(object sender, LeagueEvent e)
+        {
+            try
+            {
+                var result = e.Data.ToString();
+
+                // fires my public event to indicate the game flow
+                var response = new GameFlowChanged(Helpers.GetStateFromString(result));
+                SyncContext.Post(e => OnGameFlowChanged?.Invoke(this, response), null);
+            }
+            catch (Exception ex)
+            {
+                Helpers.Log($"{GetType().Name}._GameFlowChanged - {ex.Message}");
+                throw;
+            }
+        }
+
+        private void _ChampSelectedChanged(object sender, LeagueEvent e)
+        {
+            try
+            {
+                var data = e.Data.ToString();
+                var session = JsonSerializer.Deserialize<Session>(data);
+                Helpers.Log(data);
+                ChampionPool response = new ChampionPool();
+
+                foreach (Team t in session.myTeam)
+                {
+                    var champ = new Champion()
+                    {
+                        Id = t.championId,
+                        AssignedPosition = t.assignedPosition,
+                        SummonerId = t.summonerId,
+                    };
+
+                    response.SelectedChampions.Add(champ);
+                }
+
+                if (session.benchEnabled && session.benchChampionIds != null)
+                {
+                    foreach (int champId in session.benchChampionIds)
+                    {
+                        var champ = new BenchChampion()
+                        {
+                            ChampionId = champId,
+                        };
+                        response.BenchChampions.Add(champ);
+                    }
+                }
+
+                // fires my public event to indicate the change
+                SyncContext.Post(e => OnChampSelectedChanged?.Invoke(this, response), null);
+            }
+            catch (Exception ex)
+            {
+                Helpers.Log($"{GetType().Name}._ChampSelectedChanged - {ex.Message}");
+                throw;
+            }
+        }
+        #endregion
+
+        #region Get data from LCU
         public async Task GetSystemBuild()
         {
             try
@@ -90,42 +195,6 @@ namespace ChestGrantedRepository.LeagueClient
             catch (Exception ex)
             {
                 Helpers.Log($"{GetType().Name}.GetSystemBuild - {ex.Message}");
-                throw;
-            }
-        }
-
-        private void _GameDisconected(object sender, EventArgs e)
-        {
-            try
-            {
-                // TODO dudoso esta linea
-                api.Disconnected -= _GameDisconected;
-
-                // fires my public event to indicate LCU is NOT running
-                var response = new LeagueClientStatusChange(false);
-                SyncContext.Post(e => OnLeagueClientStatusChange?.Invoke(this, response), null);
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log($"{GetType().Name}._GameDisconected - {ex.Message}");
-                throw;
-            }
-        }
-
-        // Get some change of game flow
-        private void _GameFlowChanged(object sender, LeagueEvent e)
-        {
-            try
-            {
-                var result = e.Data.ToString();
-
-                // fires my public event to indicate the game flow
-                var response = new GameFlowChanged(Helpers.GetStateFromString(result));
-                SyncContext.Post(e => OnGameFlowChanged?.Invoke(this, response), null);
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log($"{GetType().Name}._GameFlowChanged - {ex.Message}");
                 throw;
             }
         }
@@ -198,93 +267,6 @@ namespace ChestGrantedRepository.LeagueClient
             }
         }
 
-        public void SubscribeToChampSelected()
-        {
-            api.EventHandler.Subscribe($"/{LCUEndPoints.ChampSelectSession}", ChampSelectedChanged);
-        }
-
-        public void UnsubscribeToChampSelected()
-        {
-            api.EventHandler.Unsubscribe($"/{LCUEndPoints.ChampSelectSession}");
-        }
-
-        private void _ChampSelectedChanged(object sender, LeagueEvent e)
-        {
-            try
-            {
-                var data = e.Data.ToString();
-                var session = JsonSerializer.Deserialize<Session>(data);
-                ChampionPool response = new ChampionPool();
-
-                foreach (MyTeam t in session.myTeam)
-                {
-                    var champ = new Champion()
-                    {
-                        Id = t.championId,
-                        AssignedPosition = t.assignedPosition,
-                        SummonerId = t.summonerId,
-                    };
-
-                    response.SelectedChampions.Add(champ);
-                }
-
-                foreach (Trade item in session.trades)
-                {
-                    if (item.state == Trade.State.AVAILABLE.ToString())
-                    {
-                        var champ = new AvailableTrade()
-                        {
-                            ChampionId = item.id,
-                        };
-                        response.AvailableTrades.Add(champ);
-                    }
-                }
-
-                // fires my public event to indicate the game flow
-                SyncContext.Post(e => OnChampSelectedChanged?.Invoke(this, response), null);
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log($"{GetType().Name}._ChampSelectedChanged - {ex.Message}");
-                throw;
-            }
-        }
-
-        public void SubscribeToLobbyStatus()
-        {
-            api.EventHandler.Subscribe($"/{LCUEndPoints.Lobby}", ChampSelectedChanged);
-        }
-
-        public void UnsubscribeToLobbyStatus()
-        {
-            api.EventHandler.Unsubscribe($"/{LCUEndPoints.Lobby}");
-        }
-
-        private void _LobbyStatus(object sender, LeagueEvent e)
-        {
-            try
-            {
-                var data = e.Data.ToString();
-                var lobby = JsonSerializer.Deserialize<Lobby>(data);
-
-                var response = new LobbyStatus()
-                {
-                    GameSelected = Helpers.GetModeFromString(lobby.gameConfig.gameMode),
-                    mapId = lobby.gameConfig.mapId,
-                    partyId = lobby.partyId,
-                    partyType = lobby.partyType,
-                    queueId = lobby.gameConfig.queueId,
-                };
-
-                SyncContext.Post(e => OnGetLobbyStatus?.Invoke(this, response), null);
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log($"{GetType().Name}._LobbyStatus - {ex.Message}");
-                throw;
-            }
-        }
-
         public async Task<Region> ExperimentalGetRegion()
         {
             try
@@ -319,5 +301,6 @@ namespace ChestGrantedRepository.LeagueClient
                 return null;
             }
         }
+        #endregion
     }
 }
