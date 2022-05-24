@@ -4,6 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <StartupObject>ChestGrantedView.Program</StartupObject>
+    <ApplicationIcon>ChestGranted_48x48.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

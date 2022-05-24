@@ -175,11 +175,13 @@
             // 
             // panNoChampSalect
             // 
+            this.panNoChampSalect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panNoChampSalect.Controls.Add(this.lblTitleWaiting);
-            this.panNoChampSalect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panNoChampSalect.Location = new System.Drawing.Point(0, 0);
+            this.panNoChampSalect.Location = new System.Drawing.Point(0, 112);
             this.panNoChampSalect.Name = "panNoChampSalect";
-            this.panNoChampSalect.Size = new System.Drawing.Size(800, 450);
+            this.panNoChampSalect.Size = new System.Drawing.Size(800, 338);
             this.panNoChampSalect.TabIndex = 2;
             // 
             // lblTitleWaiting
@@ -187,7 +189,7 @@
             this.lblTitleWaiting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitleWaiting.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblTitleWaiting.Location = new System.Drawing.Point(0, 241);
+            this.lblTitleWaiting.Location = new System.Drawing.Point(0, 108);
             this.lblTitleWaiting.Name = "lblTitleWaiting";
             this.lblTitleWaiting.Size = new System.Drawing.Size(797, 40);
             this.lblTitleWaiting.TabIndex = 3;
@@ -196,15 +198,17 @@
             // 
             // panARAMChampSelect
             // 
+            this.panARAMChampSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panARAMChampSelect.Controls.Add(this.lblMyChampName);
             this.panARAMChampSelect.Controls.Add(this.lblTitlePoolOfChamps);
             this.panARAMChampSelect.Controls.Add(this.lstMyTeamChamps);
             this.panARAMChampSelect.Controls.Add(this.picSelectedChamp);
             this.panARAMChampSelect.Controls.Add(this.lblTitleSelectedChamp);
-            this.panARAMChampSelect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panARAMChampSelect.Location = new System.Drawing.Point(0, 0);
+            this.panARAMChampSelect.Location = new System.Drawing.Point(0, 112);
             this.panARAMChampSelect.Name = "panARAMChampSelect";
-            this.panARAMChampSelect.Size = new System.Drawing.Size(800, 450);
+            this.panARAMChampSelect.Size = new System.Drawing.Size(800, 338);
             this.panARAMChampSelect.TabIndex = 2;
             this.panARAMChampSelect.Visible = false;
             // 
@@ -238,7 +242,7 @@
             this.lstMyTeamChamps.LargeImageList = this.imgChamps;
             this.lstMyTeamChamps.Location = new System.Drawing.Point(221, 38);
             this.lstMyTeamChamps.Name = "lstMyTeamChamps";
-            this.lstMyTeamChamps.Size = new System.Drawing.Size(567, 400);
+            this.lstMyTeamChamps.Size = new System.Drawing.Size(567, 288);
             this.lstMyTeamChamps.TabIndex = 5;
             this.lstMyTeamChamps.UseCompatibleStateImageBehavior = false;
             // 
