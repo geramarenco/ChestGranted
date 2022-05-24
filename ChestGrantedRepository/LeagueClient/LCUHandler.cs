@@ -22,17 +22,17 @@ namespace ChestGrantedRepository.LeagueClient
         // Public Events, events who listen the controller (who has some instance of this class)
         public event EventHandler<LeagueClientStatusChange> OnLeagueClientStatusChange;
         public event EventHandler<GameFlowChanged> OnGameFlowChanged;
+        public event EventHandler<GameFlowChanged> OnGetCurrentStage;
         public event EventHandler<ChampionPool> OnChampSelectedChanged;
+        public event EventHandler<ChampionPool> OnGetCurrentSelectedChamp;
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
+        public event EventHandler<Region> OnGetRegion;
 
         // Private Events, event who listen by my selft (subscribe to accions of LCU)
         private event EventHandler<LeagueEvent> GameFlowChanged;
         private event EventHandler<LeagueEvent> ChampSelectedChanged;
-
-        // for manager bench champs on aram
-        private List<BenchChampion> benchChampions;
 
         public LCUHandler()
         {
@@ -142,7 +142,7 @@ namespace ChestGrantedRepository.LeagueClient
             {
                 var data = e.Data.ToString();
                 var session = JsonSerializer.Deserialize<Session>(data);
-                Helpers.Log(data);
+
                 ChampionPool response = new ChampionPool();
 
                 foreach (Team t in session.myTeam)
@@ -178,6 +178,7 @@ namespace ChestGrantedRepository.LeagueClient
                 throw;
             }
         }
+
         #endregion
 
         #region Get data from LCU
@@ -199,13 +200,14 @@ namespace ChestGrantedRepository.LeagueClient
             }
         }
 
-        public async Task<GameFlowChanged> GetCurrentStage()
+        public async Task GetCurrentStage()
         {
             try
             {
                 var json = await api.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, LCUEndPoints.GameFlow);
                 string strState = JsonSerializer.Deserialize<string>(json);
-                return new GameFlowChanged(Helpers.GetStateFromString(strState));
+                var response = new GameFlowChanged(Helpers.GetStateFromString(strState));
+                SyncContext.Post(e => OnGetCurrentStage?.Invoke(this, response), null);
             }
             catch (Exception ex)
             {
@@ -214,13 +216,13 @@ namespace ChestGrantedRepository.LeagueClient
             }
         }
 
-        public async Task<ChampionPool> GetCurrentSelectedChamp()
+        public async Task GetCurrentSelectedChamp()
         {
             try
             {
                 var json = await api.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, LCUEndPoints.ChampSelectSession);
-                ChampionPool result = JsonSerializer.Deserialize<ChampionPool>(json);
-                return result;
+                ChampionPool response = JsonSerializer.Deserialize<ChampionPool>(json);
+                SyncContext.Post(e => OnGetCurrentSelectedChamp?.Invoke(this, response), null);
             }
             catch (Exception ex)
             {
@@ -267,7 +269,7 @@ namespace ChestGrantedRepository.LeagueClient
             }
         }
 
-        public async Task<Region> ExperimentalGetRegion()
+        public async Task ExperimentalGetRegion()
         {
             try
             {
@@ -288,19 +290,18 @@ namespace ChestGrantedRepository.LeagueClient
                 region = region.Replace("'", "");
                 region = region.Trim();
 
-                var result = new Region()
+                var response = new Region()
                 {
                     summonerRegion = region,
                 };
-
-                return result;
+                SyncContext.Post(e => OnGetRegion?.Invoke(this, response), null);
             }
             catch (Exception ex)
             {
                 Helpers.Log($"{GetType().Name}.ExperimentalGetRegion - {ex.Message}");
-                return null;
             }
         }
+
         #endregion
     }
 }

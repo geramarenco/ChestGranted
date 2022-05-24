@@ -15,7 +15,7 @@ namespace ChestGrantedRepository.RiotApi
     {
         public event EventHandler<List<Champion>> OnUpdateAllChestGranted;
 
-        private const string API_KEY = "RGAPI-49bf8f8d-b2ae-4c00-b898-1a80de7f3812"; // for development purpose only
+        private const string API_KEY = "RGAPI-0868ffaa-c2ef-48ee-900b-8edad3fefd0e"; // for development purpose only
         private readonly SynchronizationContext SyncContext;
         private string Region;
         private string EncryptedSummonerId;

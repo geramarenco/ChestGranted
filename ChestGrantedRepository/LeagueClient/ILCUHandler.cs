@@ -18,17 +18,20 @@ namespace ChestGrantedRepository.LeagueClient
         // Public Events, events who listen the controller (who has some instance of this class)
         public event EventHandler<LeagueClientStatusChange> OnLeagueClientStatusChange;
         public event EventHandler<GameFlowChanged> OnGameFlowChanged;
+        public event EventHandler<GameFlowChanged> OnGetCurrentStage;
         public event EventHandler<ChampionPool> OnChampSelectedChanged;
+        public event EventHandler<ChampionPool> OnGetCurrentSelectedChamp;
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
+        public event EventHandler<Region> OnGetRegion;
 
         public Task Connect();
         public Task GetSystemBuild();
-        public Task<GameFlowChanged> GetCurrentStage();
-        public Task<ChampionPool> GetCurrentSelectedChamp();
+        public Task GetCurrentStage();
+        public Task GetCurrentSelectedChamp();
         public Task GetCurrentSummoner();
         public Task GetChestEligibility();
-        public Task<Region> ExperimentalGetRegion();
+        public Task ExperimentalGetRegion();
     }
 }

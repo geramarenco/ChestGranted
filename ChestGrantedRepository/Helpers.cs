@@ -42,7 +42,7 @@ namespace ChestGrantedRepository
                 filePath = $"{Path.GetDirectoryName(filePath)}\\Log_{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
                 WriteToLog(message, filePath);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
