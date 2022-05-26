@@ -259,6 +259,7 @@ namespace ChestGrantedRepository.LeagueClient
                 var response = new SummonerInfo()
                 {
                     earnableChests = result.earnableChests,
+                    nextChestRechargeTime = result.nextChestRechargeTime,
                 };
                 SyncContext.Post(e => OnGetChestEligibility?.Invoke(this, response), null);
             }
@@ -269,7 +270,13 @@ namespace ChestGrantedRepository.LeagueClient
             }
         }
 
-        public async Task ExperimentalGetRegion()
+        public async Task GetRegion()
+        {
+            _ = ExperimentalGetRegion();
+        }
+
+
+        private async Task ExperimentalGetRegion()
         {
             try
             {

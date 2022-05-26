@@ -16,5 +16,8 @@ namespace ChestGrantedController
         bool ChampSelectStageVisible { get; set; }
         Champion MySelectedChamp { get; set; }
         List<Champion> PickableChampions { get; set; }
+        int ChestCount { get; set; }
+        int EarnedChests { get; set; }
+        long nextChestRechargeTime { get; set; }
     }
 }

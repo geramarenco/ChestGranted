@@ -37,6 +37,8 @@ namespace ChestGrantedView
             lblEarnableChest.ForeColor = Colors.ForeColor;
             lblSummonerName.ForeColor = Colors.ForeColor;
             lblMyChampName.ForeColor = Colors.ForeColor;
+            lblChestCount.ForeColor = Colors.ForeColor;
+            lblNextChestIn.ForeColor = Colors.ForeColor;
 
             lblTitleChests.ForeColor = Colors.ForeColor;
             lblTitleWaiting.ForeColor = Colors.ForeColor;
@@ -138,6 +140,48 @@ namespace ChestGrantedView
                 }
 
             }
+        }
+
+        int _chestCount = 0;
+        public int ChestCount
+        {
+            get => _chestCount;
+            set
+            {
+                _chestCount = value;
+                SetTotalChestsText();
+            }
+        }
+
+        int _earnedChests = 0;
+        public int EarnedChests
+        {
+            get => _earnedChests;
+            set 
+            {
+                _earnedChests = value;
+                SetTotalChestsText();
+            }
+        }
+
+        long _nextChestRechargeTime = 0;
+        public long nextChestRechargeTime 
+        { 
+            get => _nextChestRechargeTime;
+            set
+            {
+                _nextChestRechargeTime = value;
+                // TODO first, I need to know the mesure of time for convert the value in days xD
+                // lblNextChestIn.Visible = _nextChestRechargeTime != 0;
+                string days = _nextChestRechargeTime == 0 ? "" : "s";
+                lblNextChestIn.Text = $"next chest in {_nextChestRechargeTime} {days}";
+            }
+        }
+
+        private void SetTotalChestsText()
+        {
+            lblChestCount.Visible = _chestCount != 0;
+            lblChestCount.Text = $"Earned Chest {_earnedChests} of {_chestCount}";
         }
     }
 }

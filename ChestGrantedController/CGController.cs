@@ -42,7 +42,6 @@ namespace ChestGrantedController
             LCUHandler.OnGetRegion += OnGetRegion;
 
             ConnectLC();
-            InitializeRiotApi();
         }
 
         private async void InitializeRiotApi()
@@ -54,13 +53,14 @@ namespace ChestGrantedController
             riotHandler = new RiotHandler(region);
             riotHandler.OnUpdateAllChestGranted += OnUpdateAllChestGranted;
             await riotHandler.GetSummonerByName(summoner.displayName);
+            _ = riotHandler.UpdateAllChestGranted();
         }
 
         private async void ConnectLC()
         {
             await LCUHandler.Connect();
             await LCUHandler.GetSystemBuild();
-            await LCUHandler.ExperimentalGetRegion();
+            await LCUHandler.GetRegion();
         }
 
         private void OnGetRegion(object sender, Region e)
@@ -107,6 +107,7 @@ namespace ChestGrantedController
                 LCUHandler.GetCurrentSelectedChamp();
                 OnGameFlowChanged(this, e);
             }
+            InitializeRiotApi();
         }
 
         private void OnGetCurrentSelectedChamp(object sender, ChampionPool e)
@@ -120,6 +121,9 @@ namespace ChestGrantedController
             view.SummonerName = "";
             view.MySelectedChamp = null;
             view.PickableChampions = null;
+            view.ChestCount = 0;
+            view.EarnedChests = 0;
+            view.nextChestRechargeTime = 0;
         }
 
         private void UpdateChestInfo()
@@ -130,6 +134,7 @@ namespace ChestGrantedController
         private void OnGetChestEligibility(object sender, SummonerInfo e)
         {
             view.EarnableChests = e.earnableChests;
+            view.nextChestRechargeTime = e.nextChestRechargeTime;
         }
 
         private void UpdateSummonerInfo()
@@ -165,15 +170,14 @@ namespace ChestGrantedController
             else
             {
                 view.ChampSelectStageVisible = false;
+                _ = riotHandler.UpdateAllChestGranted();
             }
 
             if (e.State == GameFlowStates.WaitingForStats)
             {
                 HasChampionsGrantedChestUpdated = false;
                 _ = riotHandler.UpdateAllChestGranted();
-                UpdateChestInfo();
             }
-                
         }
 
         private void OnChampSelectedChanged(object sender, ChampionPool e)
@@ -258,7 +262,8 @@ namespace ChestGrantedController
         private void OnUpdateAllChestGranted(object sender, List<Champion> e)
         {
             HasChampionsGrantedChestUpdated = true;
+            view.ChestCount = e.Count();
+            view.EarnedChests = e.Count(x => x.ChestEarned);
         }
-
     }
 }

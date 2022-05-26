@@ -32,6 +32,6 @@ namespace ChestGrantedRepository.LeagueClient
         public Task GetCurrentSelectedChamp();
         public Task GetCurrentSummoner();
         public Task GetChestEligibility();
-        public Task ExperimentalGetRegion();
+        public Task GetRegion();
     }
 }

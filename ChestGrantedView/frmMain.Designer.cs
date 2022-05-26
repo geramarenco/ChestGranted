@@ -37,6 +37,8 @@
             this.tPanSummonerInfo = new System.Windows.Forms.TableLayoutPanel();
             this.picSummonerIcon = new System.Windows.Forms.PictureBox();
             this.panSummonerInfo = new System.Windows.Forms.Panel();
+            this.lblNextChestIn = new System.Windows.Forms.Label();
+            this.lblChestCount = new System.Windows.Forms.Label();
             this.lblEarnableChest = new System.Windows.Forms.Label();
             this.lblSummonerName = new System.Windows.Forms.Label();
             this.lblTitleChests = new System.Windows.Forms.Label();
@@ -133,6 +135,8 @@
             // 
             // panSummonerInfo
             // 
+            this.panSummonerInfo.Controls.Add(this.lblNextChestIn);
+            this.panSummonerInfo.Controls.Add(this.lblChestCount);
             this.panSummonerInfo.Controls.Add(this.lblEarnableChest);
             this.panSummonerInfo.Controls.Add(this.lblSummonerName);
             this.panSummonerInfo.Controls.Add(this.lblTitleChests);
@@ -141,6 +145,31 @@
             this.panSummonerInfo.Name = "panSummonerInfo";
             this.panSummonerInfo.Size = new System.Drawing.Size(678, 103);
             this.panSummonerInfo.TabIndex = 1;
+            // 
+            // lblNextChestIn
+            // 
+            this.lblNextChestIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblNextChestIn.AutoSize = true;
+            this.lblNextChestIn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.lblNextChestIn.Location = new System.Drawing.Point(440, 43);
+            this.lblNextChestIn.Name = "lblNextChestIn";
+            this.lblNextChestIn.Size = new System.Drawing.Size(217, 32);
+            this.lblNextChestIn.TabIndex = 5;
+            this.lblNextChestIn.Text = "next chest in 4 days";
+            this.lblNextChestIn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblNextChestIn.Visible = false;
+            // 
+            // lblChestCount
+            // 
+            this.lblChestCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblChestCount.AutoSize = true;
+            this.lblChestCount.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblChestCount.Location = new System.Drawing.Point(408, 12);
+            this.lblChestCount.Name = "lblChestCount";
+            this.lblChestCount.Size = new System.Drawing.Size(249, 32);
+            this.lblChestCount.TabIndex = 4;
+            this.lblChestCount.Text = "Earned Chest 15 / 125";
+            this.lblChestCount.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // lblEarnableChest
             // 
@@ -320,5 +349,7 @@
         private System.Windows.Forms.ListView lstMyTeamChamps;
         private System.Windows.Forms.ImageList imgChamps;
         private System.Windows.Forms.Label lblMyChampName;
+        private System.Windows.Forms.Label lblChestCount;
+        private System.Windows.Forms.Label lblNextChestIn;
     }
 }

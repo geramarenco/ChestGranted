@@ -12,5 +12,6 @@ namespace ChestGrantedRepository.LeagueClient.EventsArgs
         public string displayName { get; internal set; }
         public int earnableChests { get; internal set; }
         public int profileIconId { get; internal set; }
+        public long nextChestRechargeTime { get; internal set; }
     }
 }
