@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -15,18 +17,31 @@ namespace ChestGrantedRepository.RiotApi
     {
         public event EventHandler<List<Champion>> OnUpdateAllChestGranted;
 
-        private const string API_KEY = "RGAPI-07a28c33-cdbb-4aa4-ae34-c0895d1468f2"; // for development purpose only
         private readonly SynchronizationContext SyncContext;
         private string Region;
         private string EncryptedSummonerId;
         private List<Champion> Champions = null;
 
         private string ApiUrl { get => $"https://{Region}.api.riotgames.com/lol"; }
+        private string ApiToken { get; set; }
 
         public RiotHandler(string region)
         {
             Region = region.ToLower();
             SyncContext = AsyncOperationManager.SynchronizationContext;
+            // TODO this es temporal, only until RIOT give me a production token
+            GetApiKeyFromFile();
+        }
+
+        private void GetApiKeyFromFile()
+        {
+            var path = System.Reflection.Assembly.GetEntryAssembly().Location;
+            path = Path.GetDirectoryName(path);
+            var tokenPath = $"{path}\\RiotApi.txt";
+            using (StreamReader r = new StreamReader(tokenPath))
+            {
+                ApiToken = r.ReadLine();
+            }
         }
 
         public async Task GetSummonerByName(string summonerName)
@@ -37,13 +52,17 @@ namespace ChestGrantedRepository.RiotApi
                 var client = new HttpClient();
 
                 var msg = new HttpRequestMessage(HttpMethod.Get, url);
-                msg.Headers.Add("X-Riot-Token", API_KEY);
+                msg.Headers.Add("X-Riot-Token", ApiToken);
 
                 var res = await client.SendAsync(msg);
+                if (res.StatusCode != HttpStatusCode.OK)
+                    throw new Exception($"imposible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
+
                 var json = await res.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<Summoner>(json);
 
                 EncryptedSummonerId = result.id;
+
             }
             catch (Exception ex)
             {
@@ -60,9 +79,12 @@ namespace ChestGrantedRepository.RiotApi
                 var client = new HttpClient();
 
                 var msg = new HttpRequestMessage(HttpMethod.Get, url);
-                msg.Headers.Add("X-Riot-Token", API_KEY);
+                msg.Headers.Add("X-Riot-Token", ApiToken);
 
                 var res = await client.SendAsync(msg);
+                if(res.StatusCode != HttpStatusCode.OK)
+                    throw new Exception($"imposible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
+
                 var json = await res.Content.ReadAsStringAsync();
                 var champs = JsonSerializer.Deserialize<List<ChampionMastery>>(json);
 

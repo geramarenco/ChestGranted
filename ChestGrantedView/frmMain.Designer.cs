@@ -98,9 +98,9 @@
             // 
             // panLoLIsRunning
             // 
+            this.panLoLIsRunning.Controls.Add(this.panARAMChampSelect);
             this.panLoLIsRunning.Controls.Add(this.tPanSummonerInfo);
             this.panLoLIsRunning.Controls.Add(this.panNoChampSalect);
-            this.panLoLIsRunning.Controls.Add(this.panARAMChampSelect);
             this.panLoLIsRunning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panLoLIsRunning.Location = new System.Drawing.Point(0, 0);
             this.panLoLIsRunning.Name = "panLoLIsRunning";
@@ -166,9 +166,9 @@
             this.lblChestCount.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblChestCount.Location = new System.Drawing.Point(408, 12);
             this.lblChestCount.Name = "lblChestCount";
-            this.lblChestCount.Size = new System.Drawing.Size(249, 32);
+            this.lblChestCount.Size = new System.Drawing.Size(262, 32);
             this.lblChestCount.TabIndex = 4;
-            this.lblChestCount.Text = "Earned Chest 15 / 125";
+            this.lblChestCount.Text = "Earned Chest 888 / 888";
             this.lblChestCount.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // lblEarnableChest
@@ -177,8 +177,9 @@
             this.lblEarnableChest.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblEarnableChest.Location = new System.Drawing.Point(196, 37);
             this.lblEarnableChest.Name = "lblEarnableChest";
-            this.lblEarnableChest.Size = new System.Drawing.Size(0, 40);
+            this.lblEarnableChest.Size = new System.Drawing.Size(33, 40);
             this.lblEarnableChest.TabIndex = 3;
+            this.lblEarnableChest.Text = "4";
             this.lblEarnableChest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblSummonerName
@@ -187,8 +188,9 @@
             this.lblSummonerName.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblSummonerName.Location = new System.Drawing.Point(3, 6);
             this.lblSummonerName.Name = "lblSummonerName";
-            this.lblSummonerName.Size = new System.Drawing.Size(0, 40);
+            this.lblSummonerName.Size = new System.Drawing.Size(165, 40);
             this.lblSummonerName.TabIndex = 2;
+            this.lblSummonerName.Text = "Manmattan";
             this.lblSummonerName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblTitleChests
@@ -248,6 +250,7 @@
             this.lblMyChampName.Name = "lblMyChampName";
             this.lblMyChampName.Size = new System.Drawing.Size(188, 32);
             this.lblMyChampName.TabIndex = 7;
+            this.lblMyChampName.Text = "Nasus";
             this.lblMyChampName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblTitlePoolOfChamps
@@ -256,9 +259,9 @@
             this.lblTitlePoolOfChamps.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblTitlePoolOfChamps.Location = new System.Drawing.Point(221, 3);
             this.lblTitlePoolOfChamps.Name = "lblTitlePoolOfChamps";
-            this.lblTitlePoolOfChamps.Size = new System.Drawing.Size(178, 32);
+            this.lblTitlePoolOfChamps.Size = new System.Drawing.Size(171, 32);
             this.lblTitlePoolOfChamps.TabIndex = 6;
-            this.lblTitlePoolOfChamps.Text = "Others Champs";
+            this.lblTitlePoolOfChamps.Text = "Pull of champs";
             this.lblTitlePoolOfChamps.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lstMyTeamChamps
@@ -267,6 +270,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstMyTeamChamps.BackColor = System.Drawing.SystemColors.Control;
+            this.lstMyTeamChamps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lstMyTeamChamps.HideSelection = false;
             this.lstMyTeamChamps.LargeImageList = this.imgChamps;
             this.lstMyTeamChamps.Location = new System.Drawing.Point(221, 38);
@@ -312,7 +316,7 @@
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Chest Granted";
+            this.Text = "Available Chest for champions";
             this.panLoLNotRunning.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picConnecting)).EndInit();
             this.panLoLIsRunning.ResumeLayout(false);
