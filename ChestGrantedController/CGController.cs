@@ -46,28 +46,43 @@ namespace ChestGrantedController
 
         private async void InitializeRiotApi()
         {
-            if (riotHandler != null) return;
-            if (region == string.Empty) return;
-            if (summoner == null) return;
+            try
+            {
+                if (riotHandler != null) return;
+                if (region == string.Empty) return;
+                if (summoner == null) return;
 
-            riotHandler = new RiotHandler(region);
-            riotHandler.OnUpdateAllChestGranted += OnUpdateAllChestGranted;
-            await riotHandler.GetSummonerByName(summoner.displayName);
-            _ = riotHandler.UpdateAllChestGranted();
+                riotHandler = new RiotHandler(region);
+                riotHandler.OnUpdateAllChestGranted += OnUpdateAllChestGranted;
+                riotHandler.OnGetError += OnGetErrorFromRiotApi;
+                await riotHandler.GetSummonerByName(summoner.displayName);
+                _ = riotHandler.UpdateAllChestGranted();
+            }
+            catch (Exception ex)
+            {
+                view.ShowError($"can not initialize riot api: - {ex.Message}");
+            }
         }
 
         private async void ConnectLC()
         {
-            await LCUHandler.Connect();
-            await LCUHandler.GetSystemBuild();
-            await LCUHandler.GetRegion();
+            try
+            {
+                await LCUHandler.Connect();
+                await LCUHandler.GetSystemBuild();
+                await LCUHandler.GetRegion();
+            }
+            catch (Exception ex)
+            {
+                view.ShowError($"can not initialize riot api: - {ex.Message}");
+            }
         }
 
-        private void OnGetRegion(object sender, Region e)
+        private void OnGetRegion(object sender, SummonerInfo e)
         {
             if (e != null)
             {
-                region = e.summonerRegion;
+                region = e.region;
                 InitializeRiotApi();
             }
         }
@@ -128,7 +143,14 @@ namespace ChestGrantedController
 
         private void UpdateChestInfo()
         {
-            _ = LCUHandler.GetChestEligibility();
+            try
+            {
+                _ = LCUHandler.GetChestEligibility();
+            }
+            catch (Exception ex)
+            {
+                view.ShowError($"can not update data LCU: - {ex.Message}");
+            }
         }
 
         private void OnGetChestEligibility(object sender, SummonerInfo e)
@@ -139,7 +161,14 @@ namespace ChestGrantedController
 
         private void UpdateSummonerInfo()
         {
-            _ = LCUHandler.GetCurrentSummoner();
+            try
+            {
+                _ = LCUHandler.GetCurrentSummoner();
+            }
+            catch (Exception ex)
+            {
+                view.ShowError($"can not update data LCU: - {ex.Message}");
+            }
         }
 
         private void OnGetCurrentSummoner(object sender, SummonerInfo e)
@@ -152,8 +181,15 @@ namespace ChestGrantedController
 
         private void GetProfileIcon(int profileIconId)
         {
-            if (dragonHandler != null)
-                dragonHandler.GetProfileIcon(profileIconId);
+            try
+            {
+                if (dragonHandler != null)
+                    dragonHandler.GetProfileIcon(profileIconId);
+            }
+            catch (Exception ex)
+            {
+                view.ShowError($"can not update data LCU: - {ex.Message}");
+            }
         }
 
         private void OnGetProfileIcon(object sender, SummonerImage e)
@@ -264,6 +300,11 @@ namespace ChestGrantedController
             HasChampionsGrantedChestUpdated = true;
             view.ChestCount = e.Count();
             view.EarnedChests = e.Count(x => x.ChestEarned);
+        }
+
+        private void OnGetErrorFromRiotApi(object sender, RiotApiException e)
+        {
+            view.ShowAlert(e.Message);
         }
     }
 }

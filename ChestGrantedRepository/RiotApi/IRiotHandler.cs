@@ -9,6 +9,7 @@ namespace ChestGrantedRepository.RiotApi
     public interface IRiotHandler
     {
         public event EventHandler<List<Champion>> OnUpdateAllChestGranted;
+        public event EventHandler<RiotApiException> OnGetError;
 
         public Task GetSummonerByName(string summonerName);
         public Task UpdateAllChestGranted();

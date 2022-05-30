@@ -19,5 +19,7 @@ namespace ChestGrantedController
         int ChestCount { get; set; }
         int EarnedChests { get; set; }
         long nextChestRechargeTime { get; set; }
+        void ShowAlert(string message, string caption = "Alert");
+        void ShowError(string message, string caption = "Error");
     }
 }

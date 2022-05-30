@@ -183,5 +183,15 @@ namespace ChestGrantedView
             lblChestCount.Visible = _chestCount != 0;
             lblChestCount.Text = $"Earned Chest {_earnedChests} of {_chestCount}";
         }
+
+        public void ShowAlert(string message, string caption = "Alert")
+        {
+            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public void ShowError(string message, string caption = "Error")
+        {
+            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }

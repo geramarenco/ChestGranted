@@ -28,7 +28,7 @@ namespace ChestGrantedRepository.LeagueClient
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
-        public event EventHandler<Region> OnGetRegion;
+        public event EventHandler<SummonerInfo> OnGetRegion;
 
         // Private Events, event who listen by my selft (subscribe to accions of LCU)
         private event EventHandler<LeagueEvent> GameFlowChanged;
@@ -272,41 +272,21 @@ namespace ChestGrantedRepository.LeagueClient
 
         public async Task GetRegion()
         {
-            _ = ExperimentalGetRegion();
-        }
-
-
-        private async Task ExperimentalGetRegion()
-        {
             try
             {
-                // trying to get an error as response
-                /*
-                 {
-                    "errorCode": "RPC_ERROR",
-                    "httpStatus": 404,
-                    "implementationDetails": {},
-                    "message": "No survey available at this moment for puuid '3bdecfef-74af-58c2-8a95-e9f739a6f419', region 'LA2', locale 'en_US'."
-                */
-
-                var json = await api.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, LCUEndPoints.Survey, ensureSuccessStatusCode: false);
-                var surveyError = JsonSerializer.Deserialize<SurveyError>(json);
-                var message = surveyError.message.Split(",");
-                var region = message[1];
-                region = region.Replace("region '", "");
-                region = region.Replace("'", "");
-                region = region.Trim();
-
-                var response = new Region()
+                var result = await api.RequestHandler.GetResponseAsync<LoginDataPacket>(HttpMethod.Get, LCUEndPoints.LoginDataPacket);
+                var response = new SummonerInfo()
                 {
-                    summonerRegion = region,
+                    region = result.platformId,
                 };
                 SyncContext.Post(e => OnGetRegion?.Invoke(this, response), null);
             }
             catch (Exception ex)
             {
-                Helpers.Log($"{GetType().Name}.ExperimentalGetRegion - {ex.Message}");
+                Helpers.Log($"{GetType().Name}.GetCurrentSummoner - {ex.Message}");
+                throw;
             }
+
         }
 
         #endregion

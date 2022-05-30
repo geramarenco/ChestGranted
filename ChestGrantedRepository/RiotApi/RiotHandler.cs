@@ -16,6 +16,7 @@ namespace ChestGrantedRepository.RiotApi
     public class RiotHandler : IRiotHandler
     {
         public event EventHandler<List<Champion>> OnUpdateAllChestGranted;
+        public event EventHandler<RiotApiException> OnGetError;
 
         private readonly SynchronizationContext SyncContext;
         private string Region;
@@ -35,19 +36,40 @@ namespace ChestGrantedRepository.RiotApi
 
         private void GetApiKeyFromFile()
         {
-            var path = System.Reflection.Assembly.GetEntryAssembly().Location;
-            path = Path.GetDirectoryName(path);
-            var tokenPath = $"{path}\\RiotApi.txt";
-            using (StreamReader r = new StreamReader(tokenPath))
+            try
             {
-                ApiToken = r.ReadLine();
+                var path = System.Reflection.Assembly.GetEntryAssembly().Location;
+                path = Path.GetDirectoryName(path);
+                var tokenPath = $"{path}\\RiotApi.txt";
+                using (StreamReader r = new StreamReader(tokenPath))
+                {
+                    ApiToken = r.ReadLine();
+                }
             }
+            catch (Exception ex)
+            {
+                throw new Exception("Getting api token from txt file", ex);
+            }
+        }
+
+        private void CheckForConfig()
+        {
+            if (Region == string.Empty)
+                throw new RiotApiException("Summoner region is not configured");
+
+            if(EncryptedSummonerId == string.Empty)
+                throw new RiotApiException("Encrypted summoner id is not configured");
+
+            if (ApiToken == string.Empty)
+                throw new RiotApiException("Riot token is not configured");
         }
 
         public async Task GetSummonerByName(string summonerName)
         {
             try
             {
+                CheckForConfig();
+
                 var url = $"{ApiUrl}/{RiotApiEndPoints.SummonerByName}/{summonerName}";
                 var client = new HttpClient();
 
@@ -55,6 +77,9 @@ namespace ChestGrantedRepository.RiotApi
                 msg.Headers.Add("X-Riot-Token", ApiToken);
 
                 var res = await client.SendAsync(msg);
+                if (res.StatusCode == HttpStatusCode.Forbidden)
+                    throw new RiotApiException($"imposible connect to RiotApi check your Riot Token");
+
                 if (res.StatusCode != HttpStatusCode.OK)
                     throw new Exception($"imposible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
 
@@ -62,7 +87,10 @@ namespace ChestGrantedRepository.RiotApi
                 var result = JsonSerializer.Deserialize<Summoner>(json);
 
                 EncryptedSummonerId = result.id;
-
+            }
+            catch (RiotApiException ex)
+            {
+                SyncContext.Post(e => OnGetError?.Invoke(this, ex), null);
             }
             catch (Exception ex)
             {
@@ -82,7 +110,10 @@ namespace ChestGrantedRepository.RiotApi
                 msg.Headers.Add("X-Riot-Token", ApiToken);
 
                 var res = await client.SendAsync(msg);
-                if(res.StatusCode != HttpStatusCode.OK)
+                if (res.StatusCode == HttpStatusCode.Forbidden)
+                    throw new RiotApiException($"imposible connect to RiotApi check your Riot Token");
+
+                if (res.StatusCode != HttpStatusCode.OK)
                     throw new Exception($"imposible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
 
                 var json = await res.Content.ReadAsStringAsync();
@@ -100,6 +131,10 @@ namespace ChestGrantedRepository.RiotApi
                 }
                 
                 SyncContext.Post(e => OnUpdateAllChestGranted?.Invoke(this, Champions), null);
+            }
+            catch(RiotApiException ex)
+            {
+                SyncContext.Post(e => OnGetError?.Invoke(this, ex), null);
             }
             catch (Exception ex)
             {

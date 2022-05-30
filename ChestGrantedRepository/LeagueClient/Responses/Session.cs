@@ -8,7 +8,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
 {
     class Session
     {
-        public List<object> actions { get; set; }
+        public List<Action> actions { get; set; }
         public bool allowBattleBoost { get; set; }
         public bool allowDuplicatePicks { get; set; }
         public bool allowLockedEvents { get; set; }
@@ -39,7 +39,7 @@ namespace ChestGrantedRepository.LeagueClient.Responses
 
     class Action
     {
-        public int actorCellId { get; set; }
+        public double actorCellId { get; set; }
         public int championId { get; set; }
         public bool completed { get; set; }
         public int id { get; set; }
@@ -47,6 +47,15 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public bool isInProgress { get; set; }
         public int pickTurn { get; set; }
         public string type { get; set; }
+
+        public enum Type
+        {
+            Pick,
+            TenBansReveal,
+            Ban,
+        }
+
+
     }
 
     class Bans

@@ -24,7 +24,7 @@ namespace ChestGrantedRepository.LeagueClient
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
-        public event EventHandler<Region> OnGetRegion;
+        public event EventHandler<SummonerInfo> OnGetRegion;
 
         public Task Connect();
         public Task GetSystemBuild();
