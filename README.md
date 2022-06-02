@@ -11,7 +11,7 @@ For now, is only working on ARAM...
 
 ![image](https://user-images.githubusercontent.com/47601701/171546263-ae50e057-73ad-4cc3-9af7-f4b04c3154fd.png)
 
-2. Download the lastest version
+2. Download the [lastest](https://github.com/geramarenco/ChestGranted/releases/download/v0.0.1/ChestGranted.v0.0.1.rar) version
 3. Unrar
 4. Paste your API key on the first line of RiotApi.txt file
 5. Run
