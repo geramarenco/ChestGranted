@@ -23,16 +23,19 @@ namespace ChestGrantedRepository.LeagueClient
         public event EventHandler<LeagueClientStatusChange> OnLeagueClientStatusChange;
         public event EventHandler<GameFlowChanged> OnGameFlowChanged;
         public event EventHandler<GameFlowChanged> OnGetCurrentStage;
+        public event EventHandler<LobbyStatus> OnGameFlowSession;
         public event EventHandler<ChampionPool> OnChampSelectedChanged;
         public event EventHandler<ChampionPool> OnGetCurrentSelectedChamp;
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
         public event EventHandler<SummonerInfo> OnGetCurrentSummoner;
         public event EventHandler<SummonerInfo> OnGetChestEligibility;
         public event EventHandler<SummonerInfo> OnGetRegion;
+        
 
-        // Private Events, event who listen by my selft (subscribe to accions of LCU)
+        // Private Events, event who listen by my self (subscribe to accions of LCU)
         private event EventHandler<LeagueEvent> GameFlowChanged;
         private event EventHandler<LeagueEvent> ChampSelectedChanged;
+        private event EventHandler<LeagueEvent> GameFlowSessionChanged;
 
         public LCUHandler()
         {
@@ -58,12 +61,12 @@ namespace ChestGrantedRepository.LeagueClient
             {
                 // Initialize a connection to the league client.
                 api = await LeagueClientApi.ConnectAsync();
-
                 api.Disconnected += _GameDisconected;
 
                 // subscribed event = my event handler
                 SubscribeToGameFlow();
                 SubscribeToChampSelected();
+                SubscribeToGameFlowSession();
 
                 // fires my public event to indicate LCU is running
                 var response = new LeagueClientStatusChange(true);
@@ -87,6 +90,18 @@ namespace ChestGrantedRepository.LeagueClient
         {
             GameFlowChanged -= _GameFlowChanged;
             api.EventHandler.Unsubscribe($"/{LCUEndPoints.GameFlow}");
+        }
+
+        private void SubscribeToGameFlowSession()
+        {
+            GameFlowSessionChanged += _OnGameFlowSession;
+            api.EventHandler.Subscribe($"/{LCUEndPoints.GameFlowSession}", GameFlowSessionChanged);
+        }
+
+        private void UnsubscribeToGameFlowSession()
+        {
+            GameFlowSessionChanged -= _OnGameFlowSession;
+            api.EventHandler.Unsubscribe($"/{LCUEndPoints.GameFlowSession}");
         }
 
         public void SubscribeToChampSelected()
@@ -138,10 +153,11 @@ namespace ChestGrantedRepository.LeagueClient
 
         private void _ChampSelectedChanged(object sender, LeagueEvent e)
         {
+            Helpers.Log(e.ToString());
             try
             {
                 var data = e.Data.ToString();
-                var session = JsonSerializer.Deserialize<Session>(data);
+                var session = JsonSerializer.Deserialize<ChampSelectSession>(data);
 
                 ChampionPool response = new ChampionPool();
 
@@ -178,6 +194,31 @@ namespace ChestGrantedRepository.LeagueClient
                 throw;
             }
         }
+
+        private void _OnGameFlowSession(object sender, LeagueEvent e)
+        {
+            var data = e.Data.ToString();
+            var session = JsonSerializer.Deserialize<GameFlowSession>(data);
+            if (session.phase == "Lobby")
+            {
+                var response = new LobbyStatus()
+                {
+                    gameId = session.gameData.gameId,
+                    GameMode = Helpers.GetModeFromString(session.map.gameMode),
+                    id = session.gameData.queue.id,
+                    isCustomGame = session.gameData.isCustomGame,
+                    mapId = session.map.id,
+                    mapStringId = session.map.mapStringId,
+                };
+                SyncContext.Post(e => OnGameFlowSession?.Invoke(this, response), null);
+            }
+            else if (session.phase == "ChampSelect")
+            {
+                Helpers.Log(e.ToString());
+                // game in progress (?
+            }
+        }
+
 
         #endregion
 
@@ -274,7 +315,7 @@ namespace ChestGrantedRepository.LeagueClient
         {
             try
             {
-                var result = await api.RequestHandler.GetResponseAsync<LoginDataPacket>(HttpMethod.Get, LCUEndPoints.LoginDataPacket);
+                var result = await api.RequestHandler.GetResponseAsync<LoginDataPacket>(HttpMethod.Get, $"/{LCUEndPoints.LoginDataPacket}");
                 var response = new SummonerInfo()
                 {
                     region = result.platformId,

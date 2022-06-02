@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChestGrantedRepository.LeagueClient.Responses
 {
-    class Session
+    class ChampSelectSession
     {
-        public List<Action> actions { get; set; }
+        public List<List<Action>> actions { get; set; }
         public bool allowBattleBoost { get; set; }
         public bool allowDuplicatePicks { get; set; }
         public bool allowLockedEvents { get; set; }
@@ -40,22 +40,12 @@ namespace ChestGrantedRepository.LeagueClient.Responses
     class Action
     {
         public double actorCellId { get; set; }
-        public int championId { get; set; }
+        public double championId { get; set; }
         public bool completed { get; set; }
-        public int id { get; set; }
+        public double id { get; set; }
         public bool isAllyAction { get; set; }
         public bool isInProgress { get; set; }
-        public int pickTurn { get; set; }
         public string type { get; set; }
-
-        public enum Type
-        {
-            Pick,
-            TenBansReveal,
-            Ban,
-        }
-
-
     }
 
     class Bans

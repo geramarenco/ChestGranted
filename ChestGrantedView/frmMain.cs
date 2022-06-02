@@ -32,6 +32,7 @@ namespace ChestGrantedView
             panLoLIsRunning.BackColor = Colors.BackColor;
             panSummonerInfo.BackColor = Colors.BackColor;
             lstMyTeamChamps.BackColor = Colors.BackColor;
+            lstBenchChamps.BackColor = Colors.BackColor;
 
             lblConnecting.ForeColor = Colors.ForeColor;
             lblEarnableChest.ForeColor = Colors.ForeColor;
@@ -43,7 +44,10 @@ namespace ChestGrantedView
             lblTitleChests.ForeColor = Colors.ForeColor;
             lblTitleWaiting.ForeColor = Colors.ForeColor;
             lblTitleSelectedChamp.ForeColor = Colors.ForeColor;
-            lblTitlePoolOfChamps.ForeColor = Colors.ForeColor;
+            lblTitleMyTeam.ForeColor = Colors.ForeColor;
+            lblTitleBenchCamps.ForeColor = Colors.ForeColor;
+
+            
         }
 
         public bool LoLIsRunning
@@ -68,11 +72,12 @@ namespace ChestGrantedView
                 try
                 {
                     _profilePicture = value;
-                    picSummonerIcon.Image = new Bitmap(_profilePicture);
+                    //picSummonerIcon.Image = new Bitmap(_profilePicture);
+                    picSummonerIcon.Image = new Bitmap(Helpers.OvalImage(new Bitmap(_profilePicture)), new Size(100, 100));
                 }
                 catch (Exception ex)
                 {
-                    picSummonerIcon.Image = ChestGrantedView.Properties.Resources.imgNotFound;
+                    picSummonerIcon.Image = Properties.Resources.imgNotFound;
                     Console.WriteLine(ex.Message);
                 }
             }
@@ -100,34 +105,34 @@ namespace ChestGrantedView
                 
                 if (_mySelectedChamp == null) return;
                 
-                if (!imgChamps.Images.ContainsKey(_mySelectedChamp.PictureName))
-                    imgChamps.Images.Add(_mySelectedChamp.PictureName, Image.FromFile(_mySelectedChamp.PicturePath));
+                if (!imgChamps_120x120.Images.ContainsKey(_mySelectedChamp.PictureName))
+                    imgChamps_120x120.Images.Add(_mySelectedChamp.PictureName, Image.FromFile(_mySelectedChamp.PicturePath));
 
                 if(_mySelectedChamp.ChestEarned)
-                    picSelectedChamp.Image = Helpers.MakeGrayscale(imgChamps.Images[_mySelectedChamp.PictureName]);
+                    picSelectedChamp.Image = Helpers.MakeGrayscale(imgChamps_120x120.Images[_mySelectedChamp.PictureName]);
                 else
-                    picSelectedChamp.Image = imgChamps.Images[_mySelectedChamp.PictureName];
+                    picSelectedChamp.Image = imgChamps_120x120.Images[_mySelectedChamp.PictureName];
                 lblMyChampName.Text = _mySelectedChamp.Name;
             }
         }
 
-        List<Champion> _pickableChampions;
-        public List<Champion> PickableChampions
+        List<Champion> _myTeamChamps;
+        public List<Champion> MyTeamChamps
         {
-            get => _pickableChampions;
+            get => _myTeamChamps;
             set
             {
-                _pickableChampions = value;
+                _myTeamChamps = value;
                 lstMyTeamChamps.Items.Clear();
 
-                if (_pickableChampions == null) return;
+                if (_myTeamChamps == null) return;
 
-                foreach (var c in _pickableChampions)
+                foreach (var c in _myTeamChamps)
                 {
-                    if (!imgChamps.Images.ContainsKey(c.PictureName))
+                    if (!imgChamps_60x60.Images.ContainsKey(c.PictureName))
                     {
-                        imgChamps.Images.Add(c.PictureName, Image.FromFile(c.PicturePath));
-                        imgChamps.Images.Add($"Gray{c.PictureName}", Helpers.MakeGrayscale(Image.FromFile(c.PicturePath)));
+                        imgChamps_60x60.Images.Add(c.PictureName, Image.FromFile(c.PicturePath));
+                        imgChamps_60x60.Images.Add($"Gray{c.PictureName}", Helpers.MakeGrayscale(Image.FromFile(c.PicturePath)));
                     }
 
                     var item = new ListViewItem()
@@ -138,7 +143,36 @@ namespace ChestGrantedView
                     };
                     lstMyTeamChamps.Items.Add(item);
                 }
+            }
+        }
 
+        List<Champion> _benchChamps;
+        public List<Champion> BenchChamps
+        {
+            get => _benchChamps;
+            set
+            {
+                _benchChamps = value;
+                lstBenchChamps.Items.Clear();
+
+                if (_benchChamps == null) return;
+
+                foreach (var c in _benchChamps)
+                {
+                    if (!imgChamps_60x60.Images.ContainsKey(c.PictureName))
+                    {
+                        imgChamps_60x60.Images.Add(c.PictureName, Image.FromFile(c.PicturePath));
+                        imgChamps_60x60.Images.Add($"Gray{c.PictureName}", Helpers.MakeGrayscale(Image.FromFile(c.PicturePath)));
+                    }
+
+                    var item = new ListViewItem()
+                    {
+                        ForeColor = Colors.ForeColor,
+                        ImageKey = c.ChestEarned ? $"Gray{c.PictureName}" : c.PictureName,
+                        Text = c.Name,
+                    };
+                    lstBenchChamps.Items.Add(item);
+                }
             }
         }
 

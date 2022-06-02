@@ -42,23 +42,6 @@ namespace ChestGrantedRepository.LeagueClient.Responses
         public object broadcastMessages { get; set; }
     }
 
-    class GameTypeConfig
-    {
-        public bool allowTrades { get; set; }
-        public string banMode { get; set; }
-        public double banTimerDuration { get; set; }
-        public bool crossTeamChampionPool { get; set; }
-        public bool duplicatePick { get; set; }
-        public bool exclusivePick { get; set; }
-        public double id { get; set; }
-        public double mainPickTimerDuration { get; set; }
-        public double maxAllowableBans { get; set; }
-        public string name { get; set; }
-        public string pickMode { get; set; }
-        public double postPickTimerDuration { get; set; }
-        public bool teamChampionPool { get; set; }
-    }
-
     class SimpleMessage
     {
         public double accountId { get; set; }

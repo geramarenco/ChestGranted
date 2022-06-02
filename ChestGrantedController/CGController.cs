@@ -40,6 +40,7 @@ namespace ChestGrantedController
             LCUHandler.OnGetCurrentStage += OnGetCurrentStage;
             LCUHandler.OnGetCurrentSelectedChamp += OnGetCurrentSelectedChamp;
             LCUHandler.OnGetRegion += OnGetRegion;
+            LCUHandler.OnGameFlowSession += OnGameFlowSession;
 
             ConnectLC();
         }
@@ -135,7 +136,8 @@ namespace ChestGrantedController
             view.EarnableChests = 0;
             view.SummonerName = "";
             view.MySelectedChamp = null;
-            view.PickableChampions = null;
+            view.MyTeamChamps = null;
+            view.BenchChamps = null;
             view.ChestCount = 0;
             view.EarnedChests = 0;
             view.nextChestRechargeTime = 0;
@@ -218,14 +220,16 @@ namespace ChestGrantedController
 
         private void OnChampSelectedChanged(object sender, ChampionPool e)
         {
-            // TODO get map info to for improve of displayed data
-            ARAMSettings(e.SelectedChampions, e.BenchChampions);
+            if(currentMode == GameMode.ARAM)
+                ARAMSettings(e.SelectedChampions, e.BenchChampions);
         }
 
         private async void ARAMSettings(List<Champion> teamSelecction, List<BenchChampion> benchChampions)
         {
             // getting champs selected from all my team
             var champs = new List<Champion>();
+            var benchChamps = new List<Champion>();
+
             champs.AddRange(teamSelecction);
             // remove summoner with out champ selected
             champs.RemoveAll(x => x.Id == 0);
@@ -233,7 +237,8 @@ namespace ChestGrantedController
             if (!champs.Any())
             {
                 view.MySelectedChamp = null;
-                view.PickableChampions = null;
+                view.MyTeamChamps = null;
+                view.BenchChamps = null;
                 return;
             }
 
@@ -245,7 +250,8 @@ namespace ChestGrantedController
             if (!ids.Any())
             {
                 view.MySelectedChamp = null;
-                view.PickableChampions = null;
+                view.MyTeamChamps = null;
+                view.BenchChamps = null;
                 return;
             }
 
@@ -286,13 +292,14 @@ namespace ChestGrantedController
                     if (riotChamp != null)
                         ddChamp.ChestEarned = riotChamp.ChestEarned;
 
-                    champs.Add(ddChamp);
+                    benchChamps.Add(ddChamp);
                 }
             }
 
             view.MySelectedChamp = champs.FirstOrDefault(x => x.SummonerId == summoner.summonerId);
             champs.RemoveAll(x => x.SummonerId == summoner.summonerId);
-            view.PickableChampions = champs;
+            view.MyTeamChamps = champs;
+            view.BenchChamps = benchChamps;
         }
 
         private void OnUpdateAllChestGranted(object sender, List<Champion> e)
@@ -305,6 +312,11 @@ namespace ChestGrantedController
         private void OnGetErrorFromRiotApi(object sender, RiotApiException e)
         {
             view.ShowAlert(e.Message);
+        }
+
+        private void OnGameFlowSession(object sender, LobbyStatus e)
+        {
+            currentMode = e.GameMode;
         }
     }
 }

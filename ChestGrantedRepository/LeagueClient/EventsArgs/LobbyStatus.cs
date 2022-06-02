@@ -9,10 +9,12 @@ namespace ChestGrantedRepository.LeagueClient.EventsArgs
 {
     public class LobbyStatus
     {
-        public GameMode GameSelected { get; internal set; }
+        public double gameId { get; internal set; }
+        public bool isCustomGame { get; internal set; }
+        public GameMode GameMode { get; internal set; }
+        public int id { get; internal set; }
+        public string type { get; internal set; }
         public int mapId { get; internal set; }
-        public string partyId { get; internal set; }
-        public string partyType { get; internal set; }
-        public int queueId { get; internal set; }
+        public string mapStringId { get; internal set; }
     }
 }

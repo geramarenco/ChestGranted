@@ -14,9 +14,10 @@ namespace ChestGrantedRepository.LeagueClient
         public const string GameFlow = "lol-gameflow/v1/gameflow-phase";
         public const string ChampSelectSession = "lol-champ-select/v1/session";
         public const string SystemBuild = "system/v1/builds";
-        public const string Lobby = "/lol-lobby/v2/lobby";
-        public const string Survey = "/lol-pft/v2/survey";
-        public const string LoginDataPacket = "/lol-platform-config/v1/namespaces/LoginDataPacket";
+        //public const string Lobby = "lol-lobby/v2/lobby";
+        //public const string Survey = "lol-pft/v2/survey";
+        public const string LoginDataPacket = "lol-platform-config/v1/namespaces/LoginDataPacket";
+        public const string GameFlowSession = "lol-gameflow/v1/session";
 
     }
 }

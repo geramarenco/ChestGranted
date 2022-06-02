@@ -19,6 +19,7 @@ namespace ChestGrantedRepository.LeagueClient
         public event EventHandler<LeagueClientStatusChange> OnLeagueClientStatusChange;
         public event EventHandler<GameFlowChanged> OnGameFlowChanged;
         public event EventHandler<GameFlowChanged> OnGetCurrentStage;
+        public event EventHandler<LobbyStatus> OnGameFlowSession;
         public event EventHandler<ChampionPool> OnChampSelectedChanged;
         public event EventHandler<ChampionPool> OnGetCurrentSelectedChamp;
         public event EventHandler<LeagueClientBuild> OnGetSystemBuild;
