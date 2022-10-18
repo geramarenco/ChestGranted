@@ -220,7 +220,7 @@ namespace ChestGrantedController
 
         private void OnChampSelectedChanged(object sender, ChampionPool e)
         {
-            if(currentMode == GameMode.ARAM)
+            if(currentMode == GameMode.ARAM || currentMode == GameMode.URF)
                 ARAMSettings(e.SelectedChampions, e.BenchChampions);
         }
 

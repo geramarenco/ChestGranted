@@ -1,4 +1,5 @@
 ﻿using ChestGrantedRepository.RiotApi.Response;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,25 +31,21 @@ namespace ChestGrantedRepository.RiotApi
         {
             Region = region.ToLower();
             SyncContext = AsyncOperationManager.SynchronizationContext;
-            // TODO this es temporal, only until RIOT give me a production token
-            GetApiKeyFromFile();
+            GetApiKeyFromSecrets();
         }
 
-        private void GetApiKeyFromFile()
+        private void GetApiKeyFromSecrets()
         {
             try
             {
-                var path = System.Reflection.Assembly.GetEntryAssembly().Location;
-                path = Path.GetDirectoryName(path);
-                var tokenPath = $"{path}\\RiotApi.txt";
-                using (StreamReader r = new StreamReader(tokenPath))
-                {
-                    ApiToken = r.ReadLine();
-                }
+                var config = new ConfigurationBuilder()
+                    .AddUserSecrets<RiotHandler>()
+                    .Build();
+                ApiToken = config["RiotApiKey"];
             }
             catch (Exception ex)
             {
-                throw new Exception("Getting api token from txt file", ex);
+                throw new Exception("Getting api token", ex);
             }
         }
 
@@ -78,10 +75,10 @@ namespace ChestGrantedRepository.RiotApi
 
                 var res = await client.SendAsync(msg);
                 if (res.StatusCode == HttpStatusCode.Forbidden)
-                    throw new RiotApiException($"imposible connect to RiotApi check your Riot Token");
+                    throw new RiotApiException($"impossible connect to RiotApi check your Riot Token");
 
                 if (res.StatusCode != HttpStatusCode.OK)
-                    throw new Exception($"imposible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
+                    throw new Exception($"impossible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
 
                 var json = await res.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<Summoner>(json);
@@ -111,10 +108,10 @@ namespace ChestGrantedRepository.RiotApi
 
                 var res = await client.SendAsync(msg);
                 if (res.StatusCode == HttpStatusCode.Forbidden)
-                    throw new RiotApiException($"imposible connect to RiotApi check your Riot Token");
+                    throw new RiotApiException($"impossible connect to RiotApi check your Riot Token");
 
                 if (res.StatusCode != HttpStatusCode.OK)
-                    throw new Exception($"imposible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
+                    throw new Exception($"impossible connect to RiotApi - response code : {res.StatusCode} - URL: {url} - Token: {ApiToken}");
 
                 var json = await res.Content.ReadAsStringAsync();
                 var champs = JsonSerializer.Deserialize<List<ChampionMastery>>(json);
